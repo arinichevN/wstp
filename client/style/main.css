@@ -1,0 +1,187 @@
+.gr{
+	border: 1px solid gray;
+	background-color:cornsilk;
+	float:left;
+	clear:left;
+	margin:3px;
+	padding:3px;
+}
+.grr{
+	border: 1px solid gray;
+	background-color:wheat;
+	float:left;
+	clear:left;
+	margin:3px;
+	padding:3px;
+}
+.grs{
+	border: 1px solid gray;
+	background-color:aliceblue;
+	float:left;
+	clear:left;
+	margin:3px;
+	padding:3px;
+}
+.gr_head{
+	float: left;
+	color: crimson;
+	margin: 3px;
+	font-size:x-large;
+}
+.gr_sh{
+	font-family: monospace;
+	float: left;
+	color: gray;
+	margin: 3px;
+}
+.gr_hcont{
+	float: left;
+	width:100%;
+}
+.gr_bcont{
+	float: left;
+	width:100%;
+}
+.gr_sh:hover{
+	color: black;
+	cursor: default;
+}
+.gr_itemCont{
+	
+}
+
+.gr_rowCont{
+	
+}
+
+.pr{
+	float:left;
+	clear:left;
+	padding: 3px;
+	margin: 1px;
+}
+.pr_br{
+	float:left;
+	clear:left;
+	padding: 3px;
+	margin: 1px;
+	background-color:orangered;
+}
+.pr_descr{
+	float:left;
+	margin-right: 5px;
+}
+.pr_getelem{
+	float:left;
+	min-width: 50px;
+	min-height:20px;
+	margin: 1px;
+	padding-left: 3px;
+	padding-right:3px;
+	background-color:lightgray;
+}
+.pr_getelem:hover{
+    outline:1px solid gray;
+}
+.pr_setelem{
+	float:left;
+	margin-left:5px;
+	max-width:80px;
+}
+.pr_idelem{
+	float:left;
+	min-width: 50px;
+}
+.pr_button{
+	float:left;
+}
+.pr_btnprot{
+	text-decoration: line-through;
+	color:red;
+}
+.pr_success{
+    color: green;
+    opacity: 1;
+}
+.pr_failed{
+    color: red;
+    opacity: 1;
+}
+.prp_failed{
+	color:red;
+}
+.pr_badval{
+    color: lightyellow;
+    opacity: 1;
+}
+.pr_sametm{
+    color: lightblue;
+    opacity: 1;
+}
+.r_cont{
+	float:left;
+}
+.rs_rowCont{
+	float:left;
+	clear:left;
+}
+.rs_select{
+	float:left;
+}
+.f_common{
+	float:left;
+}
+.f_int{
+	width:70px;
+}
+.f_float{
+	width:90px;
+}
+.tcolumn{
+	float:left;
+}
+.tfield{
+	float:left;
+	width:100%;
+}
+.tfieldnv{
+	color:antiquewhite;
+}
+.flcl{
+	float:left;
+	clear:left;
+}
+.flcr{
+	float:left;
+	clear:right;
+}
+.fl{
+	float:left;
+}
+.rcr_cont{
+	border: 1px solid gray;
+	background-color:cornsilk;
+	margin:3px;
+	padding:3px;
+}
+.rcr_step{
+	border: 1px solid gray;
+	background-color:antiquewhite;
+	margin:3px;
+	padding:3px;
+}
+.rcr_str{
+	padding-right:7px;
+}
+.rcr_badval{
+	color:gray;
+}
+.rcr_important{
+	font-weight:bold;
+}
+.rcr_ini{
+	
+}
+.rcr_run{
+	font-style: oblique;
+}
