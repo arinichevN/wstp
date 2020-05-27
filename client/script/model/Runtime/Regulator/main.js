@@ -61,10 +61,10 @@ function RuntimeRegulator(){
 		}
 		return true;
 	};
-	this.setSource = function(v, func){
-		this.source = v;
-		this.func = func;
-	};
+	//this.setSource = function(v, func){
+		//this.source = v;
+		//this.func = func;
+	//};
 	this.setView = function(view){
 		this.view = view;
 	};

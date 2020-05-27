@@ -69,6 +69,25 @@ trans.addDict([
     {id: 361, str: ["channel state",  "состояние канала"]},
 	{id: 362, str: ["previous",  "предыдущий"]},
 	{id: 363, str: ["create new channel based on parameters from upper tables",  "создать канал на основе параметров из таблиц выше"]},
+	
+	{id: 364, str: ["logger id",  "идентификатор регистратора"]},
+	{id: 365, str: ["busy state EM id",  "идентификатор ИМ рабочего состояния"]},
+	{id: 366, str: ["emergency state EM id",  "идентификатор ИМ ошибки"]},
+	{id: 367, str: ["busy EM output id",  "идентификатор выхода ИМ рабочего состояния"]},
+	{id: 368, str: ["emergency EM output id",  "идентификатор выхода ИМ ошибки"]},
+	{id: 369, str: ["output",  "выход"]},
+	{id: 370, str: ["EM output",  "выход ИМ"]},
+	{id: 371, str: ["logger",  "регистратор"]},
+	
+	{id: 372, str: ["number of rows",  "количество строк"]},
+	
+	{id: 373, str: ["show chart",  "показать график"]},
+	{id: 374, str: ["copy to clipboard",  "копировать в буфер обмана"]},
+	{id: 375, str: ["chart",  "график"]},
+	{id: 376, str: ["copy",  "копировать"]},
+	{id: 377, str: ["logger",  "регистратор"]},
+	{id: 378, str: ["hide chart",  "скрыть график"]},
+	{id: 379, str: ["current step",  "текущий шаг"]},
 ]);
 //menu
 trans.addDict([

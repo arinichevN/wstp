@@ -44,12 +44,31 @@ CREATE TABLE "step" (
 	"hold_time" INTEGER NOT NULL,
 	"next_id" INTEGER NOT NULL
 );
+CREATE TABLE "logger" (
+	"id" INTEGER PRIMARY KEY,
+	"interval" INTEGER NOT NULL,
+	"max_rows" INTEGER NOT NULL
+);
+CREATE TABLE "em_out" (
+	"id" INTEGER PRIMARY KEY,
+	"out" REAL NOT NULL
+);
+CREATE TABLE "log" (
+    "channel_id" INTEGER NOT NULL,
+    "mark" INTEGER NOT NULL,
+    "value" REAL NOT NULL
+);
 CREATE TABLE "channel" (
 	"id" INTEGER PRIMARY KEY,
 	"em_id" INTEGER NOT NULL,
+	"eem_id" INTEGER NOT NULL, --emergency EM
+	"eem_out_id" INTEGER NOT NULL,
+	"bem_id" INTEGER NOT NULL, --busy EM
+	"bem_out_id" INTEGER NOT NULL,
 	"sensor_id" INTEGER NOT NULL,
 	"step_id" INTEGER NOT NULL,
-	"reg_id" INTEGER NOT NULL
+	"reg_id" INTEGER NOT NULL,
+	"logger_id" INTEGER NOT NULL
 );
 CREATE TABLE "rchannel" (
 	"id" INTEGER PRIMARY KEY

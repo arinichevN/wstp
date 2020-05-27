@@ -1,4 +1,5 @@
 var BLINK_DELAY = 270;
+var LOGGER_PERIOD_MS = 10000;
 
 function blinkSuccess(elem){
 	blink(elem,"pr_success", BLINK_DELAY);	
@@ -8,6 +9,7 @@ function blinkFailure(elem){
 	blink(elem,"pr_failed", BLINK_DELAY);	
 }
 
+	
 var app = {
     NAME_SIZE: 32,
     controller_state: null,
@@ -26,3 +28,4 @@ var app = {
     }
 };
 elem.push(app);
+

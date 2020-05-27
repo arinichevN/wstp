@@ -27,21 +27,12 @@ function suspend() {
 
 function getData($q) {
     global $db_connection;
-//    $err = null;
-//    $r = sqlite_query($db_connection, $q, $err);
-//    if (!$r) {
-//        throw new \Exception("getData: query failed: $err");
-//    }
     $r = $db_connection->query($q);
     return $r;
 }
 
 function getDataAll($q) {
     global $db_connection;
-//    $r = sqlite_array_query($db_connection, $q, SQLITE_ASSOC);
-//    if (!$r) {
-//        throw new \Exception("getDataAll: query failed: " . sqlite_error_string(sqlite_last_error($db_connection)));
-//    }
     $r = $db_connection->query($q);
     $arr = [];
     while ($row = $r->fetchArray(SQLITE3_ASSOC)) {
@@ -53,31 +44,34 @@ function getDataAll($q) {
 //command shall be executed
 function command($q) {
     global $db_connection;
-//    try {
     $db_connection->exec($q);
-//    } catch (Exception $e) {
-//        throw new \Exception("command: query failed: " . $e->getMessage());
-//    }
+
 }
 
 function commandF(&$q) {
     global $db_connection;
-//    $r = sqlite_exec($db_connection, $q);
-//    if (!$r) {
-//        return false;
-//    }
-//    return true;
     return $db_connection->exec($q);
 }
 
 function query($q) {
     global $db_connection;
-    // return sqlite_query($db_connection, $q);
     return $db_connection->query($q);
 }
 
 function fetch_assoc($r) {
     global $db_connection;
-    // return sqlite_fetch_array($r, SQLITE_ASSOC);
     return $r->fetchArray(SQLITE3_ASSOC);
+}
+
+function getInt($q){
+	global $db_connection;
+	$r=$db_connection->query($q);
+	$row = $r->fetchArray(SQLITE3_NUM);
+	$r->finalize();
+	if ($row) {
+        return (int) $row[0];
+    } else {
+        throw new \Exception('\db\getInt failed');
+    }
+	
 }

@@ -60,3 +60,24 @@ var yn_list = [
 	{name: "NO", value:0}
 ];
 
+function equalEMs(em1, em2){
+	if(
+		em1.id === em2.id && 
+		em1.peer.ip_addr === em2.peer.ip_addr && 
+		em1.peer.port === em2.peer.port
+	){
+		return true;
+	}
+	return false;
+}
+
+function equalSensors(s1, s2){
+	if(
+		s1.id === s2.id && 
+		s1.peer.ip_addr === s2.peer.ip_addr && 
+		s1.peer.port === s2.peer.port
+		){
+		return true;
+	}
+	return false;
+}

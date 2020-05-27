@@ -3,9 +3,14 @@ function RuntimeChannel(){
 	this.steps = null;
 	this.step_id = null;
 	this.em = new RuntimeEM();
+	this.bem = new RuntimeEM();//it is active when channel is busy
+	this.bout = null;
+	this.eem = new RuntimeEM();//it is active in case of error
+	this.eout = null;
     this.sensor = new RuntimeSensor();
     this.step = new RuntimeStep();
     this.reg = new RuntimeRegulator();
+    this.logger = new RuntimeLogger();
     this.precision = 3;
     this.view = null;
     this.state = OFF;
@@ -19,18 +24,60 @@ function RuntimeChannel(){
 		this.em.setView(this.view);
 		this.step.setView(this.view);
 		this.reg.setView(this.view);
+		this.logger.setView(this.view.logger);
 	};
-	this.setParam = function(channel, em, em_peer, sensor, sensor_peer, reg, pid, pos2, steps){
+	this.setParam = function(channel, em, em_peer, bem, bem_peer, bout, eem, eem_peer, eout, sensor, sensor_peer, reg, pid, pos2, steps, logger){
 		this.id = channel.id;
 		this.step_id = channel.step_id;
 		this.em.setParam(em, em_peer);
+		if(bem){
+			this.bem.setParam(bem, bem_peer);
+		}else{
+			this.bem.disable();
+		}
+		this.bout = bout;
+		if(eem){
+			this.eem.setParam(eem, eem_peer);
+		}else{
+			this.eem.disable();
+		}
+		this.eout = eout;
 		this.sensor.setParam(sensor, sensor_peer);
 		this.reg.setParam(reg, pid, pos2);
+		if(logger){
+			this.logger.setParam(logger, this.id, this.sensor, LOGGER_PERIOD_MS);
+		}else{
+			this.logger.disable();
+		}
 		this.steps = steps;
 		this.goToStep(this.step_id);
 	};
+	
 	this.checkParam = function(){
-		return this.em.checkParam && this.sensor.checkParam() && this.reg.checkParam() && this.step.checkParam();
+		var r = this.em.checkParam() && this.sensor.checkParam() && this.reg.checkParam() && this.step.checkParam();
+		if(this.bem.enabled){
+			r = r && this.bem.checkParam();
+			if(this.bout === null) {console.warn("BEM output is bad"); r = r && false;}
+			if(equalEMs(this.bem, this.em)){
+				console.warn("BEM is equal to EM"); r = r && false;
+			}
+		}
+		if(this.eem.enabled){
+			r = r && this.eem.checkParam();
+			if(this.eout === null) {console.warn("EEM output is bad"); r = r && false;}
+			if(equalEMs(this.eem, this.em)){
+				console.warn("EEM is equal to EM"); r = r && false;
+			}
+		}
+		if(this.bem.enabled && this.eem.enabled){
+			if(equalEMs(this.bem, this.eem)){
+				console.warn("EEM is equal to BEM"); r = r && false;
+			}
+		}
+		if(this.logger.enabled){
+			r = r && this.logger.checkParam();
+		}
+		return r;
 	};
 	this.showAll = function(){
 		this.sensor.showAll();
@@ -38,6 +85,10 @@ function RuntimeChannel(){
 		this.step.showAll();
 		this.reg.showAll();
 		this.view.showAll();
+	};
+	this.setState = function(v){
+		this.state = v;
+		this.view.showChannelState();
 	};
 	this.getRowForDB = function(){
 		return {id:this.id};
@@ -68,52 +119,47 @@ function RuntimeChannel(){
 		}
 		var self = this;
 		this.reset();
-		this.state = INIT;
+		this.setState(INIT);
 		this.sensor.start();
-		this.view.showChannelState();
-	};
-	this._stop = function(state){
-		if(this.state === state) return;
-		this.sensor.stop();
-		this.em.stop();
-		this.step.stop();
-		this.reg.stop();
-		this.reset();
-		this.state = state;
-		this.view.showChannelState();
 	};
 	this.stop = function(){
 		switch(this.state){
 			case OFF:case EOFF:case FAILURE:return;
 		}
-		this.state = STOPPING;
+		this.setState(STOPPING);
 		this.sensor.stop();
 		this.step.stop();
 		this.reg.stop();
 		this.reset();
 		this.em.stop();
-		this.view.showChannelState();
+		this.bem.stop();
+		this.eem.stop();
 	};
 	this.emergencyStop = function(){
-		this._stop(EOFF);
+		if(this.state === EOFF) return;
+		this.sensor.stop();
+		this.em.stop();
+		this.bem.stop();
+		this.step.stop();
+		this.reg.stop();
+		this.reset();
+		this.setState(EOFF);
+		this.eem.setOutput(this.eout);
 	};
 	this.pause = function(){
 		if(this.step.pause()){
-			this.state = PAUSING;
+			this.setState(PAUSING);
 			this.reg.stop();
 			this.em.stop();
-			this.view.showChannelState();
 			return true;
 		}
-		
 		return false;
 	};
 	this.resume = function(){
 		if(this.step.resume()){
-			this.state = RESUMING;
+			this.setState(RESUMING);
 			this.reg.start();
 			this.em.start();
-			this.view.showChannelState();
 			return true;
 		}
 		return false;
@@ -159,6 +205,7 @@ function RuntimeChannel(){
 	};
     this.onSensorUpdate = function(){
 		this.reg.control(this.step.getOutput(), this.sensor.output, this.sensor.tm);
+		this.em.setOutput(this.reg.getOutput());
 	};
 	this.onStepFinish = function(){
 		if(this.goToStep(this.step.next_id)){
@@ -173,37 +220,44 @@ function RuntimeChannel(){
 	};
 	this.onSensorStarted = function(){
 		this.em.start();
+		if(this.bem.enabled){
+			this.bem.start();
+		}
+		if(eem.enabled){
+			this.eem.start();
+		}
 	};
-	this.onEMFailure = function(){
+	this.onEMFailure = function(caller){
 		this.emergencyStop();
 	};
-	this.onEMStarted = function(){
+	this.onEMStarted = function(caller){
 		switch(this.state){
 			case INIT:
 				this.step.start();
 				this.reg.start();
 				this.start_time = Date.now();
 				this.startUTTimer();
-				this.state = RUN;
-				this.view.showChannelState();
+				this.setState(RUN);
+				this.bem.setOutput(this.bout);
 				break;
 			case RESUMING:
-				this.state = RUN;
-				this.view.showChannelState();
+				this.setState(RUN);
+				this.bem.setOutput(this.bout);
 				break;
 			default:break;
 		}
-		
 	};
-	this.onEMStoped = function(){
+	this.onEMStoped = function(caller){
 		switch(this.state){
 			case PAUSING:
-				this.state = PAUSE;
-				this.view.showChannelState();
+				this.setState(PAUSE);
 				break;
 			case STOPPING:
-				this.state = OFF;
-				this.view.showChannelState();
+				if(this.em.state === OFF){
+					if(this.bem.enabled && this.bem.state !== OFF) break;
+					if(this.eem.enabled && this.eem.state !== OFF) break;
+					this.setState(OFF);
+				}
 				break;
 			default:break;
 		}
@@ -211,7 +265,8 @@ function RuntimeChannel(){
     var self = this;
     this.sensor.setSlave(self);
     this.em.setSlave(self);
-	this.em.setSource(self.reg);
+    this.bem.setSlave(self);
+    this.eem.setSlave(self);
     this.step.setSensor(self.sensor);
     this.step.setSlave(self);
 }

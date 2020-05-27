@@ -1,4 +1,4 @@
-function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps, channels, tbl, header_id ) {
+function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps, loggers, em_outs, channels, tbl, header_id ) {
 	this.arr = arr;
 	this.peers = peers;
 	this.ems = ems;
@@ -7,6 +7,8 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 	this.pos2s = pos2s;
 	this.regs = regs;
 	this.steps = steps;
+	this.loggers = loggers;
+	this.em_outs = em_outs;
 	this.channels = channels;
 	this.tbl = tbl;
 	this.header_id = header_id;
@@ -30,6 +32,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		GET:1,
 		SAVE:2
 	};
+	this.util = new RuntimeCommon();
 	this.updateStrSh = function(){
 		this.shE.title = trans.get(this.sht);
 	};
@@ -82,19 +85,41 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 	};
 	this.setRchannelParam = function(rchannel, channel_id){
 		var channel = getById(this.channels, channel_id);
-		if(channel == null) {console.warn("channel not found", channel_id);return false;}
+		if(channel == null) {console.warn("channel %d not found", channel_id);return false;}
 		var reg = getById(this.regs, channel.reg_id);
-		if(reg == null) {console.warn("regulator not found", channel.reg_id);return false;}
+		if(reg == null) {console.warn("regulator %d not found for channel %d", channel.reg_id, channel_id);return false;}
+		
+		var logger = getById(this.loggers, channel.logger_id);
+		if(logger == null) {console.warn("logger %d not found for channel %d, it will be disabled", channel.logger_id, channel_id);}
+		
 		var em = getById(this.ems, channel.em_id);
-		if(em == null) {console.warn("EM not found", channel.em_id);return false;}
+		if(em == null) {console.warn("EM %d not found", channel.em_id, channel_id);return false;}
+		
+		var bem = getById(this.ems, channel.bem_id);
+		var bem_peer = null;
+		var bout = null;
+		if(bem == null) {console.warn("BEM %d not found for channel %d, it will be disabled", channel.bem_id, channel_id);}
+		else {
+			bem_peer = getById(this.peers, bem.peer_id); if(bem_peer == null) {console.warn("BEM peer %d not found for channel %d", bem.peer_id, channel_id);return false;}
+			bout = getById(this.em_outs, channel.bem_out_id); if(bout == null) {console.warn("BEM output %d not found for channel %d", channel.bem_out_id, channel_id);return false;}
+			}
+		
+		var eem = getById(this.ems, channel.eem_id);
+		var eem_peer = null;
+		if(eem == null) {console.warn("EEM %d not found for channel %d, it will be disabled", channel.eem_id, channel_id);}
+		else {
+			eem_peer = getById(this.peers, eem.peer_id); if(eem_peer == null) {console.warn("EEM peer %d not found for channel %d", eem.peer_id, channel_id);return false;}
+			eout = getById(this.em_outs, channel.eem_out_id); if(eout == null) {console.warn("EEM output %d not found for channel %d", channel.eem_out_id, channel_id);return false;}
+			}
+		
 		var sensor = getById(this.sensors, channel.sensor_id);
-		if(sensor == null) {console.warn("sensor not found", channel.sensor_id);return false;}
+		if(sensor == null) {console.warn("sensor %d not found for channel %d", channel.sensor_id, channel_id);return false;}
 		var step = getById(this.steps, channel.step_id);
-		if(step == null) {console.warn("step not found", channel.step_id);return false;}
+		if(step == null) {console.warn("step %d not found for channel %d", channel.step_id, channel_id);return false;}
 		var em_peer = getById(this.peers, em.peer_id);
-		if(em_peer == null) {console.warn("peer not found", channel.peer_id);return false;}
+		if(em_peer == null) {console.warn("em %d peer not found for channel %d", em.peer_id, channel_id);return false;}
 		var sensor_peer = getById(this.peers, sensor.peer_id);
-		if(sensor_peer == null) {console.warn("peer not found", channel.peer_id);return false;}
+		if(sensor_peer == null) {console.warn("sensor %d peer not found for channel %d", sensor.peer_id, channel_id);return false;}
 		var pid = null;
 		var pos2 = null;
 		var pos1 = null;
@@ -110,10 +135,10 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 				break;
 		}
 		if(pid===null && pos2===null && pos1===null){
-			console.warn("regulation method not found");
+			console.warn("regulation method not found for channel %d", channel_id);
 			return false;
 		}
-		rchannel.setParam(channel, em, em_peer, sensor, sensor_peer, reg, pid, pos2, this.steps);
+		rchannel.setParam(channel, em, em_peer, bem, bem_peer, bout, eem, eem_peer, eout, sensor, sensor_peer, reg, pid, pos2, this.steps, logger);
 		return true;
 	};
 	this.delBControl = function(){
@@ -124,16 +149,84 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 			this.delB.disabled = true;
 		}
 	};
+	this.mayAddChannel = function (nchannel){
+		var r = true;console.log(this.arr);
+		for(var i=0;i<this.arr.length;i++){
+			var channel = this.arr[i];
+			if(equalSensors(channel.sensor, nchannel.sensor)){
+				console.warn("equal Sensors for channels %d and %d", channel.id, nchannel.id);
+				r = r && false;
+			}
+			var em = channel.em;
+			if(equalEMs(em, nchannel.em)){
+				console.warn("equal EMs for channels %d and %d", channel.id, nchannel.id);
+				r = r && false;
+			}
+			if(nchannel.bem.enabled){
+				if(equalEMs(em, nchannel.bem)){
+					console.warn("equal EM and BEM for channels %d and %d", channel.id, nchannel.id);
+					r = r && false;
+				}
+			}
+			if(nchannel.eem.enabled){
+				if(equalEMs(em, nchannel.eem)){
+					console.warn("equal EM and EEM for channels %d and %d", channel.id, nchannel.id);
+					r = r && false;
+				}
+			}
+			em = channel.bem;
+			if(em.enabled){
+				if(equalEMs(em, nchannel.em)){
+					console.warn("equal BEM and EM for channels %d and %d", channel.id, nchannel.id);
+					r = r && false;
+				}
+				if(nchannel.bem.enabled){
+					if(equalEMs(em, nchannel.bem)){
+						console.warn("equal BEM and BEM for channels %d and %d", channel.id, nchannel.id);
+						r = r && false;
+					}
+				}
+				if(nchannel.eem.enabled){
+					if(equalEMs(em, nchannel.eem)){
+						console.warn("equal BEM and EEM for channels %d and %d", channel.id, nchannel.id);
+						r = r && false;
+					}
+				}
+			}
+			em = channel.eem;
+			if(em.enabled){
+				if(equalEMs(em, nchannel.em)){
+					console.warn("equal EEM and EM for channels %d and %d", channel.id, nchannel.id);
+					r = r && false;
+				}
+				if(nchannel.bem.enabled){
+					if(equalEMs(em, nchannel.bem)){
+						console.warn("equal EEM and BEM for channels %d and %d", channel.id, nchannel.id);
+						r = r && false;
+					}
+				}
+				if(nchannel.eem.enabled){
+					if(equalEMs(em, nchannel.eem)){
+						console.warn("equal EEM and EEM for channels %d and %d", channel.id, nchannel.id);
+						r = r && false;
+					}
+				}
+			}
+		}
+		return r;
+	};
 	this.addRow = function(channel_id){
 		var self = this;
 		var nd = new RuntimeChannel();
 		nd.id = channel_id;
 		if(!this.setRchannelParam(nd, nd.id)){
-			console.warn("check param");
+			return false;
+		}
+		if(!this.mayAddChannel(nd)){
 			return false;
 		}
 		this.arr.push(nd);
-		var nr = new RuntimeChannelRow(nd);
+		var nr = new RuntimeChannelRow(nd, this.util);
 		nr.updateStr();
 		nd.setView(nr);
 		var row_cont = {selected:false, selected_time:null, container:null};
