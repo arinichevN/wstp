@@ -126,7 +126,7 @@ function RuntimeRegulator(){
 		var error = goal - input.value;
 		var ierror = p.integral_error + error * dt;
 		var derror = (error - p.previous_error) / dt;
-		console.log("err: %f, ierr: %f, derr: %f, dt: %f", error, ierror, derror, dt);
+		//console.log("err: %f, ierr: %f, derr: %f, dt: %f", error, ierror, derror, dt);
 		p.out = p.kp * khc * error + p.ki * khc * ierror + p.kd * khc * derror;
 		//console.log("pid now: %f sp:%f in:%f out:%f", now, goal, input, out);
 	    if(p.out > p.out_max) {p.out = p.out_max; return p.out;}

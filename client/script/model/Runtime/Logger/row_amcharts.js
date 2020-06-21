@@ -24,6 +24,7 @@ function RuntimeLoggerRow(slave){
 	};
 	this.showData = function(){
 		this.chart.data = this.data;
+		//console.log(this.chart.data);
 	};
 	this.clearData = function(){
 		cleara(this.data);

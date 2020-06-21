@@ -10,10 +10,10 @@ function RuntimeLogger(){
 	this.enabled = true;
 	this.state = OFF;
     this.view = null;
-    this.buf = [];
     this.ACTION = {
 		SAVE:1,
-		GET:2
+		GET:2, 
+		CLEAR:3
 	};
     this.setParam = function(item, channel_id, sensor, period){
 		this.channel_id = channel_id;
@@ -105,7 +105,7 @@ function RuntimeLogger(){
 		this.cpTextToClipboard(text);
 	};
 	this.saveBuf = function () {
-		var r = this.getRowsForDB();
+		//var r = this.getRowsForDB();
 		var data = [
             {
                 action: ["save_" + this.tbl],
@@ -122,6 +122,15 @@ function RuntimeLogger(){
             }
         ];
         sendTo(this, data, this.ACTION.GET, 'server');
+	};
+	this.clearDB = function(){
+        var data = [
+            {
+                action: ['clear_log'],
+                param: {channel_id: this.channel_id}
+            }
+        ];
+        sendTo(this, data, this.ACTION.CLEAR, 'server');
 	};
 	this.getItemForView = function(db_row){
 		var channel_id = parseInt(db_row.channel_id);
@@ -146,6 +155,9 @@ function RuntimeLogger(){
 				}
 				this.view.showData();
 				break;
+			case this.ACTION.CLEAR:
+				
+				break;
 			default:
 				console.warn("confirm(): unknown action: ", action);
 				break;
@@ -159,6 +171,9 @@ function RuntimeLogger(){
 			case this.ACTION.GET:
 				console.warn("logger: failed to get data from DB, ", "channel_id: ", this.channel_id, data);
 				break;
+			case this.ACTION.CLEAR:
+				
+				break;
 			default:
 				console.warn("abort(): unknown action: ", action);
 				break;
@@ -168,15 +183,17 @@ function RuntimeLogger(){
 	this.setNewValue = function(v){
 		if(this.buf.i < this.buf.len){
 			var item = {mark:Date.now(), value:v.value};
-			this.buf.arr.push(item);
+			this.buf.arr.push(item); //console.log("logger new item", item);
 			this.buf.i++;
+			this.view.addItem(item);
+			//this.view.showData();
 		}else{
 			this.saveBuf();
 			cleara(this.buf.arr);
 			this.buf.i = 0;
 		}
 	};
-	this.control = function(){
+	this.control = function(){//console.log("logger control", this.state, RUN, OFF);
 		switch(this.state){
 			case RUN:
 				var output = this.sensor.getOutput();
@@ -190,6 +207,8 @@ function RuntimeLogger(){
 			case OFF:
 				break;
 			case INIT:
+				this.view.clearData();
+				this.clearDB();
 				this.state = RUN;
 				break;
 		}

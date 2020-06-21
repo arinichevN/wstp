@@ -223,8 +223,11 @@ function RuntimeChannel(){
 		if(this.bem.enabled){
 			this.bem.start();
 		}
-		if(eem.enabled){
+		if(this.eem.enabled){
 			this.eem.start();
+		}
+		if(this.logger.enabled){
+			this.logger.start();
 		}
 	};
 	this.onEMFailure = function(caller){
