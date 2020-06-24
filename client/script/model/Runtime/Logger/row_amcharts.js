@@ -3,6 +3,7 @@ function RuntimeLoggerRow(slave){
 	this.container = cd();
 	this.cpB = cb("");
 	this.showB = cb("");
+	this.clearB = cb("");
 	this.canvas = cd();
 	this.chart = null;
 	this.max_rows = 1;
@@ -11,6 +12,8 @@ function RuntimeLoggerRow(slave){
 		this.showB.title = trans.get(373);
 		this.cpB.title = trans.get(374);
 		this.cpB.innerHTML = trans.get(376);
+		this.clearB.title = trans.get(380);
+		this.clearB.innerHTML = trans.get(381);
 	};
 	this.setParam = function(max_rows){
 		this.max_rows = max_rows;
@@ -49,6 +52,14 @@ function RuntimeLoggerRow(slave){
 			this.hideChart();
 		}
 	};
+	this.oncleared = function(success){
+		if(success){
+			blinkSuccess(this.clearB);
+			this.clearData();
+		}else{
+			blinkFailure(this.clearB);
+		}
+	};
 	var self = this;
 	this.showB.onclick = function(){
 		self.showHideChart();
@@ -56,8 +67,11 @@ function RuntimeLoggerRow(slave){
 	this.cpB.onclick = function(){
 		self.slave.cpDataToClipboard(self.data);
 	};
+	this.clearB.onclick = function(){
+		self.slave.clearDB();
+	};
 	var lbcont = cd();
-	a(lbcont, [this.showB, this.cpB]);
+	a(lbcont, [this.showB, this.cpB, this.clearB]);
 	a(this.container, [this.canvas, lbcont]);
 	
 	//cla([this.canvas, lbcont],["chart_cont"]);

@@ -156,7 +156,7 @@ function RuntimeLogger(){
 				this.view.showData();
 				break;
 			case this.ACTION.CLEAR:
-				
+				this.view.oncleared(true);
 				break;
 			default:
 				console.warn("confirm(): unknown action: ", action);
@@ -172,7 +172,7 @@ function RuntimeLogger(){
 				console.warn("logger: failed to get data from DB, ", "channel_id: ", this.channel_id, data);
 				break;
 			case this.ACTION.CLEAR:
-				
+				this.view.oncleared(false);
 				break;
 			default:
 				console.warn("abort(): unknown action: ", action);
@@ -208,7 +208,6 @@ function RuntimeLogger(){
 				break;
 			case INIT:
 				this.view.clearData();
-				this.clearDB();
 				this.state = RUN;
 				break;
 		}

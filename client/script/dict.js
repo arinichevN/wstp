@@ -88,6 +88,8 @@ trans.addDict([
 	{id: 377, str: ["logger",  "регистратор"]},
 	{id: 378, str: ["hide chart",  "скрыть график"]},
 	{id: 379, str: ["current step",  "текущий шаг"]},
+	{id: 380, str: ["delete all rows from data base",  "удалить все строки из базы данных"]},
+	{id: 381, str: ["clear",  "очистить"]},
 ]);
 //menu
 trans.addDict([

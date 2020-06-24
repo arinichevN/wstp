@@ -106,6 +106,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		
 		var eem = getById(this.ems, channel.eem_id);
 		var eem_peer = null;
+		var eout = null;
 		if(eem == null) {console.warn("EEM %d not found for channel %d, it will be disabled", channel.eem_id, channel_id);}
 		else {
 			eem_peer = getById(this.peers, eem.peer_id); if(eem_peer == null) {console.warn("EEM peer %d not found for channel %d", eem.peer_id, channel_id);return false;}
@@ -150,7 +151,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		}
 	};
 	this.mayAddChannel = function (nchannel){
-		var r = true;console.log(this.arr);
+		var r = true;
 		for(var i=0;i<this.arr.length;i++){
 			var channel = this.arr[i];
 			if(equalSensors(channel.sensor, nchannel.sensor)){
