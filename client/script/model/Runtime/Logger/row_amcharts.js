@@ -78,7 +78,7 @@ function RuntimeLoggerRow(slave){
 	cla(this.container, ["flcr", "rcr_chart"]);
 	this.hideChart();
 	
-	am4core.useTheme(am4themes_animated);
+	am4core.useTheme(am4themes_material);
 	this.chart = am4core.create(this.canvas, am4charts.XYChart);
 	this.chart.paddingRight = 20;
 	this.chart.data = this.data;
