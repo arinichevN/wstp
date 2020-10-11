@@ -131,6 +131,7 @@ function RuntimeEM(){
                 param: {ip_addr: this.peer.ip_addr, port: this.peer.port, packs: pack}
             }
         ];
+        //console.log(pack);
         sendTo(this, data, this.ACTION.SET_GOAL, "server");
     };
 

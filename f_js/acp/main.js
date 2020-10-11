@@ -63,7 +63,7 @@ function acp_parsePack(buf_str, format) {
     return data;
 }
 
-function acp_parseResponse(buf_str, format) {console.log(buf_str);
+function acp_parseResponse(buf_str, format) {
     var data = [];
     var pack = "";
     for (var i = 0; i < buf_str.length; i++) {
