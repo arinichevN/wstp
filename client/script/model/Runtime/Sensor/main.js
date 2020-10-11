@@ -77,7 +77,7 @@ function RuntimeSensor(){
 		var success = false;
 		var new_val = false;
 		if(d !== null){
-			var data = acp_parsePack(d, {id:null, value:null, tv_sec:null, tv_nsec:null, state:null});
+			var data = acp_parseResponse(d, {id:null, value:null, tv_sec:null, tv_nsec:null, state:null});
 			if(data instanceof Array && data.length == 1){
 				var id = parseInt(data[0].id);
 				var val = parseFloat(data[0].value);
@@ -119,7 +119,7 @@ function RuntimeSensor(){
 		
 	};
     this.sendRequest = function () {
-		var pack = acp_buildPackSI(CMD_GET_CHANNEL_FTS, this.id );
+		var pack = acp_buildRequestII(ACPP_SIGN_REQUEST_GET, CMD_.GETR_CHANNEL_FTS, this.id );
         var data = [
             {
                 action: ["acp", "get_data"],

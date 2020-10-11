@@ -9,8 +9,10 @@ function RuntimeStepRow(slave, util){
 	this.hold_time = cd();
 	this.rcountd = cd();
 	this.hcountd = cd();
-	this.prevB = cb("&leftarrow;");
-	this.nextB = cb("&rightarrow;");
+	this.prevB = cb();
+	this.prevB.innerHTML = "&leftarrow;";
+	this.nextB = cb();
+	this.nextB.innerHTML = "&rightarrow;";
     this.UNKNOWN_STR = "&empty;";
     this.blink_tm = 270;
     this.precision = 2;

@@ -125,14 +125,14 @@ function tumc_cp(tbd, row, col) {//mark table cell
     clr(tbd.children[row].children[col], "copy_cell");
 }
 function cnb(n) {//create navigation button
-    var bb = cb("");
+    var bb = cb();
     bb.addEventListener("click", function () {
         showV(n);
     }, false);
     return bb;
 }
 function cnbb(n) {//create navigation back button
-    var bb = cb("");
+    var bb = cb();
     bb.addEventListener("click", function () {
         goBack();
     }, false);
@@ -455,10 +455,9 @@ function ca(t, h, txt) {
     n.innerHTML = txt;
     return n;
 }
-function cb(t) {
+function cb() {
     var n = c('button');
     s(n, 'type', 'button');
-    n.innerHTML = t;
     return n;
 }
 function cd() {
@@ -598,13 +597,6 @@ function mt(n, inh) {
         a(m, p);
     }
     return m;
-}
-function rme(elem){
-	if (elem instanceof Element) {
-		elem.parentNode.removeChild(elem);
-	}else{
-		rme(elem.container);
-	}
 }
 function clearCont(cont) {
     while (cont.hasChildNodes()) {
@@ -863,6 +855,7 @@ function limval(v, min, max) {
     }
     return v;
 }
+
 function checkFloat(v){
 	if(isNaN(v) || !isFinite(v)){
 		return 0;

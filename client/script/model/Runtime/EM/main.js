@@ -124,7 +124,7 @@ function RuntimeEM(){
 			this.showOutput(SUCCESS);
 			return;
 		}
-		var pack = acp_buildPackSIF(CMD_SET_CHANNEL_GOAL, this.id, v, this.precision);
+		var pack = acp_buildRequestIIF(ACPP_SIGN_REQUEST_SET,  CMD_.SET_CHANNEL_GOAL, this.id, v, this.precision);
         var data = [
             {
                 action: ["acp", "set_data"],

@@ -4,8 +4,8 @@ function RemoteSlaveSwitcher(){
 	this.slave = null;
 	this.ACTION = {GET:1, START:2, STOP:3, SET:4};
     this.GOAL = {
-			START:	{command:CMD_CHANNEL_START,	state:"RUN",	action:this.ACTION.START},
-			STOP:	{command:CMD_CHANNEL_STOP,	state:"OFF",	action:this.ACTION.STOP},
+			START:	{command:CMD_.CHANNEL_START,	state:"RUN",	action:this.ACTION.START},
+			STOP:	{command:CMD_.CHANNEL_STOP,	state:"OFF",	action:this.ACTION.STOP},
 		};
 	this.goal = null;
 	this.max_retry = 3;
@@ -54,7 +54,7 @@ function RemoteSlaveSwitcher(){
 	};
 	this.remoteCheckState = function(d, expected){
 		if(d !== null){
-			var data = acp_parsePack(d, {id:null, state:null});
+			var data = acp_parseResponse(d, {id:null, state:null});
 			if(data instanceof Array && data.length == 1){
 				var id = parseInt(data[0].id);
 				var state = data[0].state;
@@ -66,7 +66,7 @@ function RemoteSlaveSwitcher(){
 		return false;
 	};
 	this.remoteCommand = function () {
-		var pack = acp_buildPackSI(this.goal.command, this.id);
+		var pack = acp_buildRequestII(ACPP_SIGN_REQUEST_SET, this.goal.command, this.id);
         var data = [
             {
                 action: ["acp", "set_data"],
@@ -88,7 +88,7 @@ function RemoteSlaveSwitcher(){
 		}, this.interval);
 	};
     this.remoteGetState = function() {
-		var pack = acp_buildPackSI(CMD_GETR_CHANNEL_STATE, this.id);
+		var pack = acp_buildRequestII(ACPP_SIGN_REQUEST_GET, CMD_.GETR_CHANNEL_STATE, this.id);
         var data = [
             {
                 action: ["acp", "get_data"],

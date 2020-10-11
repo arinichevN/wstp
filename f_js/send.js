@@ -41,7 +41,9 @@ function execute() {
     //  r.timeout = 10000;
     r.open("POST", $sq[0][4], true);
     r.setRequestHeader('Content-Type', 'application/json');
-    r.send(JSON.stringify($sq[0][1]));
+    var data = JSON.stringify($sq[0][1]);
+    //console.log("send: ", data);
+    r.send(data);
 }
 function processResponse(r, action) {
     var finish = new Date();
