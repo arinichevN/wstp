@@ -598,6 +598,9 @@ function mt(n, inh) {
     }
     return m;
 }
+function rme(elem){
+	elem.container.parentNode.removeChild(elem.container);
+}
 function clearCont(cont) {
     while (cont.hasChildNodes()) {
         cont.removeChild(cont.firstChild);
