@@ -36,12 +36,11 @@ function Pos2Row(){
 	this.outMaxChanged = function(me, data){
 		me.data.out_max = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.mode.setSlave(self, self.modeChanged);
-	this.hys.setSlave(self, self.hysChanged);
-	this.out_min.setSlave(self, self.outMinChanged);
-	this.out_max.setSlave(self, self.outMaxChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.mode.setSlave(this, this.modeChanged);
+	this.hys.setSlave(this, this.hysChanged);
+	this.out_min.setSlave(this, this.outMinChanged);
+	this.out_max.setSlave(this, this.outMaxChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.mode, this.hys, this.out_min, this.out_max]);
 }

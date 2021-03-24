@@ -23,9 +23,8 @@ function ProtectedButton(slave, func, style, enable) {
 		if(this.enable && this.blocked){
 			this.blocked = false;
 			clr(this.container, [this.style]);
-			var self = this;
-			this.tmr = window.setTimeout(function () {
-                    self.block();
+			this.tmr = window.setTimeout(() => {
+                    this.block();
                 }, this.delay_ms);
 			return;
 		}
@@ -34,8 +33,7 @@ function ProtectedButton(slave, func, style, enable) {
 	if(this.enable){
 		cla(this.container, [this.style]);
 	}
-    var self = this;
-    this.container.onclick = function(){
-		self.act();
+    this.container.onclick = ()=>{
+		this.act();
 	};
 }

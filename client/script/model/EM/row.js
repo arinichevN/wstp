@@ -30,11 +30,10 @@ function EMRow(){
 	this.peerIdChanged = function(me, data){
 		me.data.peer_id = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.interval.setSlave(self, self.intervalChanged);
-	this.remote_id.setSlave(self, self.remoteIdChanged);
-	this.peer_id.setSlave(self, self.peerIdChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.interval.setSlave(this, this.intervalChanged);
+	this.remote_id.setSlave(this, this.remoteIdChanged);
+	this.peer_id.setSlave(this, this.peerIdChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.interval, this.remote_id, this.peer_id]);
 }

@@ -60,7 +60,7 @@ function RuntimeCommon() {
 		if(v===null){
 			this.elemSetBadVal(elem);
 		}else{
-			var v1 = v/1000;//seconds
+			let v1 = v/1000;//seconds
 			this.elemSetGoodVal(elem, intToTimeStr(parseInt(v1.toFixed(0))));
 		}
 	};

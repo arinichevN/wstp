@@ -91,27 +91,25 @@ function RuntimeEM(){
 		this._stop(EOFF);
 	};
 	this.onRSlaveStart = function(result){
-		var self = this;
 		if(result){
-			this.tmr = window.setInterval(function () {
-				self.remoteSetGoal();
+			this.tmr = window.setInterval(() => {
+				this.remoteSetGoal();
 			}, this.interval);
 			this.state = RUN;
-			this.slave.onEMStarted(self);
+			this.slave.onEMStarted(this);
 		}else{
 			this._stop(FAILURE);
-			this.slave.onEMFailure(self);
+			this.slave.onEMFailure(this);
 			console.warn("EM: failed to start where id = ", this.id);
 		}
 	};
 	this.onRSlaveStop = function(result){
-		var self = this;
 		if(result){
 			this._stop(OFF);
-			this.slave.onEMStoped(self);
+			this.slave.onEMStoped(this);
 		}else{
 			this._stop(FAILURE);
-			this.slave.onEMFailure(self);
+			this.slave.onEMFailure(this);
 			console.warn("EM: failed to stop where id = ", this.id);
 		}
 	};
@@ -119,13 +117,13 @@ function RuntimeEM(){
 		this.output = v;
 	};
     this.remoteSetGoal = function () {
-		var v = this.output;
+		let v = this.output;
 		if( v=== null || isNaN(v) || !isFinite(v)){
 			this.showOutput(SUCCESS);
 			return;
 		}
-		var pack = acp_buildRequestIIF(ACPP_SIGN_REQUEST_SET,  CMD_.SET_CHANNEL_GOAL, this.id, v, this.precision);
-        var data = [
+		let pack = acp_buildRequest([ACPP_SIGN_REQUEST_SET,  CMD_NOID_SET_GOAL, this.id, v.toFixed(this.precision)]);
+        let data = [
             {
                 action: ["acp", "set_data"],
                 param: {ip_addr: this.peer.ip_addr, port: this.peer.port, packs: pack}
@@ -151,8 +149,7 @@ function RuntimeEM(){
 				if(!this.checkRetry(false)){
 					this._stop(FAILURE);
 					console.warn("em: no more retry to set goal where id = ", this.id);
-					var self = this;
-					this.slave.onEMFailure(self);
+					this.slave.onEMFailure(this);
 				}
 				this.showOutput(FAILURE);
 				console.warn(data[0].data);

@@ -36,12 +36,11 @@ function StepRow(){
 	this.nextIdChanged = function(me, data){
 		me.data.next_id = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.goal.setSlave(self, self.goalChanged);
-	this.reach_time.setSlave(self, self.reachTimeChanged);
-	this.hold_time.setSlave(self, self.holdTimeChanged);
-	this.next_id.setSlave(self, self.nextIdChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.goal.setSlave(this, this.goalChanged);
+	this.reach_time.setSlave(this, this.reachTimeChanged);
+	this.hold_time.setSlave(this, this.holdTimeChanged);
+	this.next_id.setSlave(this, this.nextIdChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.goal, this.reach_time, this.hold_time, this.next_id]);
 }

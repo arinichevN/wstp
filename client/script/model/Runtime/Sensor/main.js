@@ -1,19 +1,19 @@
 function RuntimeSensor(){
 	this.id = null;
 	this.interval = null;
-    this.peer = {ip_addr:null, port:null};
-    this.output = {value:null, tm:null};
-    this.tmr = null;
-    this.slave = null;
-    this.view = null;
-    this.state = OFF;
-    this.last_tm = null;
-    this.max_retry = 3;
-    this.retry = 0;
+	this.peer = {ip_addr:null, port:null};
+	this.output = {value:null, tm:null};
+	this.tmr = null;
+	this.slave = null;
+	this.view = null;
+	this.state = OFF;
+	this.last_tm = null;
+	this.max_retry = 3;
+	this.retry = 0;
 	this.setParam = function(item, peer){
 		this.id = item.remote_id;	this.interval = item.interval;	this.peer.ip_addr = peer.ip_addr;	this.peer.port = peer.port;
 	};
-    this.checkParam = function(){
+	this.checkParam = function(){
 		if(this.id === null){console.warn("bad sensor id"); return false;}
 		if(this.interval === null){console.warn("bad sensor interval"); return false;}
 		if(this.peer.ip_addr === null){console.warn("bad sensor peer ip_addr"); return false;}
@@ -38,9 +38,8 @@ function RuntimeSensor(){
 	};
 	this.start = function(){
 		this.reset();
-		var self = this;
-		this.tmr = window.setInterval(function () {
-			self.sendRequest();
+		this.tmr = window.setInterval(() => {
+			this.sendRequest();
 		}, this.interval);
 		this.state = INIT;
 	};
@@ -74,16 +73,17 @@ function RuntimeSensor(){
     this.updateElem = function(d){
 		this.output.value = null;
 		this.output.tm = null;
-		var success = false;
-		var new_val = false;
+		let success = false;
+		let new_val = false;
+		let data = null;
 		if(d !== null){
-			var data = acp_parseResponse(d, {id:null, value:null, tv_sec:null, tv_nsec:null, state:null});
+			data = acp_parseResponse(d, {id:null, value:null, tv_sec:null, tv_nsec:null, state:null});
 			if(data instanceof Array && data.length == 1){
-				var id = parseInt(data[0].id);
-				var val = parseFloat(data[0].value);
-				var tv_sec = parseInt(data[0].tv_sec);
-				var tv_nsec = parseInt(data[0].tv_nsec);
-				var state = parseInt(data[0].state);
+				let id = parseInt(data[0].id);
+				let val = parseFloat(data[0].value);
+				let tv_sec = parseInt(data[0].tv_sec);
+				let tv_nsec = parseInt(data[0].tv_nsec);
+				let state = parseInt(data[0].state);
 				if(!(isNaN(id) || isNaN(val) || !isFinite(val) || isNaN(tv_sec) || isNaN(tv_nsec) || isNaN(state) || state !== 1 || id !== this.id)){
 					this.output.value = val;
 					this.output.tm = tv_sec + tv_nsec / 1000000000.0;
@@ -119,8 +119,8 @@ function RuntimeSensor(){
 		
 	};
     this.sendRequest = function () {
-		var pack = acp_buildRequestII(ACPP_SIGN_REQUEST_GET, CMD_.GETR_CHANNEL_FTS, this.id );
-        var data = [
+		let pack = acp_buildRequest([ACPP_SIGN_REQUEST_GET, CMD_NOID_GET_FTS, this.id]);
+        let data = [
             {
                 action: ["acp", "get_data"],
                 param: {ip_addr: this.peer.ip_addr, port: this.peer.port, packs: pack, pack_count: 1}

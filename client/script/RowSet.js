@@ -4,10 +4,10 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 	this.Item = Item;
 	this.tbl = table_name;
 	this.header_id = header_id;
-    this.container = cd();
-    this.headerE = cd();
-    this.itemCont = cd();
-    this.rowCont = cd();
+	this.container = cd();
+	this.headerE = cd();
+	this.itemCont = cd();
+	this.rowCont = cd();
 	this.shE = cd();
 	this.shE.innerHTML = "+";
 	this.sht = 302;
@@ -62,7 +62,7 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		me.delBControl();
 	};
 	this.hasSelectedRow = function(){
-		for(var i=0;i<this.rows.length;i++){
+		for(let i=0;i<this.rows.length;i++){
 			if(this.rows[i].selected){
 				return true;
 			}
@@ -70,10 +70,10 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		return false;
 	};
 	this.getNextItemId = function(){
-		var out = 0;
-		var f = false;
-		for(var i=0;i<this.arr.length;i++){
-			var id = this.arr[i].id;
+		let out = 0;
+		let f = false;
+		for(let i=0;i<this.arr.length;i++){
+			let id = this.arr[i].id;
 			if(!f) {out = id; f=true;}
 			if(out < id) {out = id;}
 		}
@@ -81,11 +81,11 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		return out;
 	};
 	this.getLastSelectedItem = function(){
-		var f = false;
-		var t;
-		var oi = -1;
-		for(var i=0;i<this.rows.length;i++){
-			var row = this.rows[i];
+		let f = false;
+		let t;
+		let oi = -1;
+		for(let i=0;i<this.rows.length;i++){
+			let row = this.rows[i];
 			if(row.selected){
 				if(!f) {t=row.selected_time; oi=i; f=true;}
 				if(t < row.selected_time){
@@ -98,8 +98,8 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		return this.arr[oi];
 	};
 	this.getSelectedRowInd = function(){
-		for(var i=0;i<this.rows.length;i++){
-			var row = this.rows[i];
+		for(let i=0;i<this.rows.length;i++){
+			let row = this.rows[i];
 			if(row.selected){
 				return i;
 			}
@@ -107,7 +107,7 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		return -1;
 	};
 	this.delBControl = function(){
-		var r = this.getSelectedRowInd();
+		let r = this.getSelectedRowInd();
 		if(r > -1){
 			this.delB.disabled = false;
 		}else{
@@ -115,17 +115,16 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		}
 	};
 	this.addRow = function(data){
-		var self = this;
-		var nr = new this.Row();
+		let nr = new this.Row();
 		nr.setData(data);
 		nr.updateStr();
-	    var row_cont = {selected:false, selected_time:null, container:null};
-	    var selectE = new FieldElemSelect();
-	    selectE.setSlave(self, self.rowSelected);
+	    let row_cont = {selected:false, selected_time:null, container:null};
+	    let selectE = new FieldElemSelect();
+	    selectE.setSlave(this, this.rowSelected);
 	    selectE.setObj(row_cont);
 	    selectE.update(false);
 	    selectE.updateStr();
-	    var rccont = cd();
+	    let rccont = cd();
 	    cla(rccont, ["rs_rowCont"]);
 	    cla(selectE, ["rs_select"]);
 		a(rccont, [selectE, nr]);
@@ -135,8 +134,8 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		
 	};
 	this.addItem = function(){
-		var nd = new this.Item();
-		var lsi = this.getLastSelectedItem();
+		let nd = new this.Item();
+		let lsi = this.getLastSelectedItem();
 		if(this.hasSelectedRow() && lsi !== null){
 			nd.copyParam(lsi);
 		}
@@ -146,7 +145,7 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		this.addRow(nd);
 	};
 	this.addItemFromDBRow = function(db_row){
-		var nd = new this.Item();
+		let nd = new this.Item();
 		if(!nd.setParamFromDBRow(db_row)){
 			console.log("bad row:", db_row);
 			return;
@@ -156,16 +155,16 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		this.addRow(nd);
 	};
 	this.getRowsForDB = function(){
-		var out = [];
-		for(var i=0;i<this.rows.length;i++){
-			var r = this.arr[i].getRowForDB();
+		let out = [];
+		for(let i=0;i<this.rows.length;i++){
+			let r = this.arr[i].getRowForDB();
 			out.push(r);
 		}
 		return out;
 	};
 	this.deleteItem = function(){
 		while(1){
-			var i = this.getSelectedRowInd();
+			let i = this.getSelectedRowInd();
 			if(i < 0){
 				break;
 			}else{
@@ -178,12 +177,12 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 	};
 	this.deleteAll = function(){
 		cleara(this.arr);
-		clearCont(this.rowCont);
+		clearc(this.rowCont);
 		cleara(this.rows);
 	};
 	this.saveAll = function(){
-		var r = this.getRowsForDB();
-		var data = [
+		let r = this.getRowsForDB();
+		let data = [
             {
                 action: ['save_'+this.tbl],
                 param: {rows:r}
@@ -193,7 +192,7 @@ function RowSet(arr, Item, Row, table_name, header_id) {
         sendTo(this, data, this.ACTION.SAVE, 'server');
 	};
 	this.getAll = function(){
-        var data = [
+        let data = [
             {
                 action: ['getall'],
                 param: {tbl: this.tbl}
@@ -210,7 +209,7 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 				break;
 			case this.ACTION.GET:
 				this.deleteAll();
-				for (var i = 0; i < d.length; i++) {
+				for (let i = 0; i < d.length; i++) {
 					this.addItemFromDBRow(d[i]);
 				}
 				cursor_blocker.disable();
@@ -240,26 +239,25 @@ function RowSet(arr, Item, Row, table_name, header_id) {
 		}
 		cursor_blocker.disable();
 	};
-	var self = this;
-	this.shE.onclick = function(){
-		self.expandHide();
+	this.shE.onclick = ()=>{
+		this.expandHide();
 	};
-	this.newB.onclick = function(){
-		self.addItem();
+	this.newB.onclick = ()=>{
+		this.addItem();
 	};
-	this.delB.onclick = function(){
-		self.deleteItem();
+	this.delB.onclick = ()=>{
+		this.deleteItem();
 	};
-	this.saveB.onclick = function(){
-		self.saveAll();
+	this.saveB.onclick = ()=>{
+		this.saveAll();
 	};
-	this.getB.onclick = function(){
-		self.getAll();
+	this.getB.onclick = ()=>{
+		this.getAll();
 	};
 	this.delBControl();
-	var hcont = cd();
+	let hcont = cd();
 	a(hcont, [this.headerE, this.shE]);
-	var bcont = cd();
+	let bcont = cd();
 	a(bcont, [this.newB, this.delB, this.saveB, this.getB]);
 	a(this.itemCont, [bcont, this.rowCont]);
     a(this.container, [hcont, this.itemCont]);

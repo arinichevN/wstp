@@ -7,18 +7,18 @@ function RuntimeChannel(){
 	this.bout = null;
 	this.eem = new RuntimeEM();//it is active in case of error
 	this.eout = null;
-    this.sensor = new RuntimeSensor();
-    this.step = new RuntimeStep();
-    this.reg = new RuntimeRegulator();
-    this.logger = new RuntimeLogger();
-    this.precision = 3;
-    this.view = null;
-    this.state = OFF;
-    this.uptime = null;
-    this.ut_interval = 500;
-    this.tmrut = null;
-    this.start_time = null;
-    this.setView = function(view){
+	this.sensor = new RuntimeSensor();
+	this.step = new RuntimeStep();
+	this.reg = new RuntimeRegulator();
+	this.logger = new RuntimeLogger();
+	this.precision = 3;
+	this.view = null;
+	this.state = OFF;
+	this.uptime = null;
+	this.ut_interval = 500;
+	this.tmrut = null;
+	this.start_time = null;
+	this.setView = function(view){
 		this.view = view;
 		this.sensor.setView(this.view);
 		this.em.setView(this.view);
@@ -54,7 +54,7 @@ function RuntimeChannel(){
 	};
 	
 	this.checkParam = function(){
-		var r = this.em.checkParam() && this.sensor.checkParam() && this.reg.checkParam() && this.step.checkParam();
+		let r = this.em.checkParam() && this.sensor.checkParam() && this.reg.checkParam() && this.step.checkParam();
 		if(this.bem.enabled){
 			r = r && this.bem.checkParam();
 			if(this.bout === null) {console.warn("BEM output is bad"); r = r && false;}
@@ -96,16 +96,15 @@ function RuntimeChannel(){
 	this.getUptime = function(){
 		switch(this.state){
 			case RUN: case PAUSE:
-				var now = Date.now();
-				var dt = now - this.start_time;
+				let now = Date.now();
+				let dt = now - this.start_time;
 				return dt;
 		}
 		return null;
 	};
 	this.startUTTimer = function(){
-		var self = this;
-		this.tmrut = window.setInterval(function () {
-			self.view.showChannelUptime();
+		this.tmrut = window.setInterval(() => {
+			this.view.showChannelUptime();
 		}, this.ut_interval);
 	};
 	this.reset = function(){
@@ -117,7 +116,6 @@ function RuntimeChannel(){
 			case OFF:case EOFF:case FAILURE: break;
 			default: return;
 		}
-		var self = this;
 		this.reset();
 		this.setState(INIT);
 		this.sensor.start();
@@ -169,10 +167,10 @@ function RuntimeChannel(){
 		return getById(this.steps, this.step.next_id);
 	};
 	this.getPrevStep = function(){
-		var pstep = null;
-		var cstep = {next_id:this.step_id};
-		for(var i=0; i < this.steps.length; i++){
-			var cstep = getById(this.steps, cstep.next_id);
+		let pstep = null;
+		let cstep = {next_id:this.step_id};
+		for(let i=0; i < this.steps.length; i++){
+			cstep = getById(this.steps, cstep.next_id);
 			if(cstep === null) {console.warn("no more steps");return null;}
 			if(cstep.id === this.step.id) return pstep;
 			pstep = cstep;
@@ -183,7 +181,7 @@ function RuntimeChannel(){
 			console.warn("step not found");
 			return false;
 		}
-		var tstep = new RuntimeStep();
+		let tstep = new RuntimeStep();
 		tstep.setParam(dbstep);
 		if(!tstep.checkParam()){
 			return false;
@@ -192,15 +190,15 @@ function RuntimeChannel(){
 		return true;
 	};
 	this.goToStep = function(step_id){
-		var step = getById(this.steps, step_id);
+		let step = getById(this.steps, step_id);
 		return this.loadStep(step);
 	};
 	this.goToPrevStep = function(){
-		var step = this.getPrevStep();
+		let step = this.getPrevStep();
 		return this.loadStep(step);
 	};
 	this.goToNextStep = function(){
-		var step = this.getNextStep();
+		let step = this.getNextStep();
 		return this.loadStep(step);
 	};
     this.onSensorUpdate = function(){
@@ -265,11 +263,10 @@ function RuntimeChannel(){
 			default:break;
 		}
 	};
-    var self = this;
-    this.sensor.setSlave(self);
-    this.em.setSlave(self);
-    this.bem.setSlave(self);
-    this.eem.setSlave(self);
-    this.step.setSensor(self.sensor);
-    this.step.setSlave(self);
+    this.sensor.setSlave(this);
+    this.em.setSlave(this);
+    this.bem.setSlave(this);
+    this.eem.setSlave(this);
+    this.step.setSensor(this.sensor);
+    this.step.setSlave(this);
 }

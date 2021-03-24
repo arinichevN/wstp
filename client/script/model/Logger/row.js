@@ -24,10 +24,9 @@ function LoggerRow(){
 	this.maxRowsChanged = function(me, data){
 		me.data.max_rows = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.interval.setSlave(self, self.intervalChanged);
-	this.max_rows.setSlave(self, self.maxRowsChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.interval.setSlave(this, this.intervalChanged);
+	this.max_rows.setSlave(this, this.maxRowsChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.interval, this.max_rows]);
 }

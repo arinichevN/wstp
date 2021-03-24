@@ -3,9 +3,9 @@ function RemoteSlaveSwitcher(){
 	this.peer = null;
 	this.slave = null;
 	this.ACTION = {GET:1, START:2, STOP:3, SET:4};
-    this.GOAL = {
-			START:	{command:CMD_.CHANNEL_START,	state:"RUN",	action:this.ACTION.START},
-			STOP:	{command:CMD_.CHANNEL_STOP,	state:"OFF",	action:this.ACTION.STOP},
+	this.GOAL = {
+			START:	{command:CMD_NOID_START,	state: 3,	action:this.ACTION.START},
+			STOP:	{command:CMD_NOID_STOP,		state: 4,	action:this.ACTION.STOP},
 		};
 	this.goal = null;
 	this.max_retry = 3;
@@ -54,11 +54,11 @@ function RemoteSlaveSwitcher(){
 	};
 	this.remoteCheckState = function(d, expected){
 		if(d !== null){
-			var data = acp_parseResponse(d, {id:null, state:null});
+			let data = acp_parseResponse(d, {id:null, state:null});
 			if(data instanceof Array && data.length == 1){
-				var id = parseInt(data[0].id);
-				var state = data[0].state;
-				if(!(isNaN(id) || state !== expected || id !== this.id)){
+				let id = parseInt(data[0].id);
+				let state = parseInt(data[0].state);
+				if(!(isNaN(id) || isNaN(state) || state !== expected || id !== this.id)){
 					return true;
 				}
 			}
@@ -66,8 +66,8 @@ function RemoteSlaveSwitcher(){
 		return false;
 	};
 	this.remoteCommand = function () {
-		var pack = acp_buildRequestII(ACPP_SIGN_REQUEST_SET, this.goal.command, this.id);
-        var data = [
+		let pack = acp_buildRequest([ACPP_SIGN_REQUEST_SET, this.goal.command, this.id]);
+        let data = [
             {
                 action: ["acp", "set_data"],
                 param: {ip_addr: this.peer.ip_addr, port: this.peer.port, packs: pack}
@@ -76,20 +76,18 @@ function RemoteSlaveSwitcher(){
         sendTo(this, data, this.ACTION.SET, "server");
     };
 	this.remoteCommandDl = function(){
-		var self = this;
-		this.tmrt = window.setTimeout(function () {
-			self.remoteCommand();
+		this.tmrt = window.setTimeout(() => {
+			this.remoteCommand();
 		}, this.interval);
 	};
 	this.remoteGetStateDl = function(){
-		var self = this;
-		this.tmrt = window.setTimeout(function () {
-			self.remoteGetState();
+		this.tmrt = window.setTimeout(() => {
+			this.remoteGetState();
 		}, this.interval);
 	};
     this.remoteGetState = function() {
-		var pack = acp_buildRequestII(ACPP_SIGN_REQUEST_GET, CMD_.GETR_CHANNEL_STATE, this.id);
-        var data = [
+		let pack = acp_buildRequestII(ACPP_SIGN_REQUEST_GET, CMD_.GETR_CHANNEL_STATE, this.id);
+        let data = [
             {
                 action: ["acp", "get_data"],
                 param: {ip_addr: this.peer.ip_addr, port: this.peer.port, packs: pack, pack_count: 1}

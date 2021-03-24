@@ -30,11 +30,10 @@ function RegulatorRow(){
 	this.pos2IdChanged = function(me, data){
 		me.data.pos2_id = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.method.setSlave(self, self.methodChanged);
-	this.pid_id.setSlave(self, self.pidIdChanged);
-	this.pos2_id.setSlave(self, self.pos2IdChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.method.setSlave(this, this.methodChanged);
+	this.pid_id.setSlave(this, this.pidIdChanged);
+	this.pos2_id.setSlave(this, this.pos2IdChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.method, this.pid_id, this.pos2_id]);
 }

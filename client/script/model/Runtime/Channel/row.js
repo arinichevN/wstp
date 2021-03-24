@@ -28,7 +28,7 @@ function RuntimeChannelRow(slave, util){
 		this.prBUpdateStr();
 	};
 	this.prBUpdateStr = function(){
-		var str;
+		let str;
 		if(this.pause){
 			str = trans.get(354);
 		}else{
@@ -133,21 +133,20 @@ function RuntimeChannelRow(slave, util){
 		this.showChannelIni();
 		this.showChannelRun();
 	};
-	var self = this;
-	this.startB.onclick = function(){
-		self.slave.start();
+	this.startB.onclick = () => {
+		this.slave.start();
 	};
-	this.stopB.onclick = function(){
-		self.slave.stop();
+	this.stopB.onclick = () => {
+		this.slave.stop();
 	};
-	this.prB.onclick = function(){
-		self.pauseResume();
+	this.prB.onclick = () => {
+		this.pauseResume();
 	};
-	var pcont = cd();
-	var picont = cd();
-	var prcont = cd();
-	var pfcont = cd();
-	var pbcont = cd();
+	let pcont = cd();
+	let picont = cd();
+	let prcont = cd();
+	let pfcont = cd();
+	let pbcont = cd();
 	
 	a(picont, [this.id, this.method]);
 	a(prcont, [this.channel_state, this.uptime, this.result, this.output]);

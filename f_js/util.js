@@ -149,97 +149,124 @@ function Enum(v) {
         this[v[i]] = i;
     }
 }
-    
+
+function acont(p, c){//console.log(p,c);
+	if (c instanceof Node) {
+		if (p instanceof Node) {
+			p.appendChild(c);
+		} else {//p not element
+			acont(p.container, c);
+		}
+	} else {//c not element
+		if (p instanceof Node) {
+			acont(p, c.container);
+		} else {//p not element
+			acont(p.container, c.container);
+		}
+	}
+	
+}
+
+function a(p, c) {
+	if (c instanceof Array) {
+		for (var i = 0; i < c.length; i++) {
+			acont(p, c[i]);
+		}
+	} else {
+		acont(p, c);
+	}
+}
+
+function isElements(elem){
+	if (elem instanceof Element) {
+		return 1;
+	} else if (elem instanceof Array) {
+		for (let i = 0; i < elem.length; i++) {
+			if (!(elem[i] instanceof Element)) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+	return 0;
+}
+
+function cla_ch(elem, cl){
+	if (elem instanceof Element) {
+		elem.classList.add(cl);
+	} else {
+		elem.container.classList.add(cl);
+	}
+}
+
 function cla(elem, cl) {
-    if (elem instanceof Array) {
-        if (cl instanceof Array) {
-            for (var i = 0; i < elem.length; i++) {
-                for (var j = 0; j < cl.length; j++) {
-                    if (elem[i] instanceof Element) {
-                        elem[i].classList.add(cl[j]);
-                    } else {
-                        elem[i].container.classList.add(cl[j]);
-                    }
-                }
-            }
-        } else {
-            for (var i = 0; i < elem.length; i++) {
-                if (elem[i] instanceof Element) {
-                    elem[i].classList.add(cl);
-                } else {
-                    elem[i].container.classList.add(cl);
-                }
-            }
-        }
-    } else {
-        if (cl instanceof Array) {
-            for (var i = 0; i < cl.length; i++) {
-                if (elem instanceof Element) {
-                    elem.classList.add(cl[i]);
-                } else {
-                    elem.container.classList.add(cl[i]);
-                }
-            }
-        } else {
-            if (elem instanceof Element) {
-                elem.classList.add(cl);
-            } else {
-                elem.container.classList.add(cl);
-            }
-        }
-    }
+	if (elem instanceof Array) {
+		if (cl instanceof Array) {
+			for (let i = 0; i < elem.length; i++) {
+				for (let j = 0; j < cl.length; j++) {
+					cla_ch(elem[i], cl[j]);
+				}
+			}
+		} else {
+			for (let i = 0; i < elem.length; i++) {
+				cla_ch(elem[i], cl);
+			}
+		}
+	} else {
+		if (cl instanceof Array) {
+			for (let i = 0; i < cl.length; i++) {
+				cla_ch(elem, cl[i]);
+			}
+		} else {
+			cla_ch(elem, cl);
+		}
+	}
 }
+
+function clr_ch(elem, cl){
+	if (elem instanceof Element) {
+		elem.classList.remove(cl);
+	} else {
+		elem.container.classList.remove(cl);
+	}
+}
+
 function clr(elem, cl) {
-    if (elem instanceof Array) {
-        if (cl instanceof Array) {
-            for (var i = 0; i < elem.length; i++) {
-                for (var j = 0; j < cl.length; j++) {
-                    if (elem[i] instanceof Element) {
-                        elem[i].classList.remove(cl[j]);
-                    } else {
-                        elem[i].container.classList.remove(cl[j]);
-                    }
-                }
-            }
-        } else {
-            for (var i = 0; i < elem.length; i++) {
-                if (elem[i] instanceof Element) {
-                    elem[i].classList.remove(cl);
-                } else {
-                    elem[i].container.classList.remove(cl);
-                }
-            }
-        }
-    } else {
-        if (cl instanceof Array) {
-            for (var i = 0; i < cl.length; i++) {
-                if (elem instanceof Element) {
-                    elem.classList.remove(cl[i]);
-                } else {
-                    elem.container.classList.remove(cl[i]);
-                }
-            }
-        } else {
-            if (elem instanceof Element) {
-                elem.classList.remove(cl);
-            } else {
-                elem.container.classList.remove(cl);
-            }
-        }
-    }
+	if (elem instanceof Array) {
+		if (cl instanceof Array) {
+			for (let i = 0; i < elem.length; i++) {
+				for (let j = 0; j < cl.length; j++) {
+					clr_ch(elem[i], cl[j]);
+				}
+			}
+		} else {
+			for (let i = 0; i < elem.length; i++) {
+				clr_ch(elem[i], cl);
+			}
+		}
+	} else {
+		if (cl instanceof Array) {
+			for (let i = 0; i < cl.length; i++) {
+				clr_ch(elem, cl[i]);
+			}
+		} else {
+			clr_ch(elem, cl);
+		}
+	}
 }
+
 function clc(elem, cl) {//every element has every class
     if (elem instanceof Array) {
         if (cl instanceof Array) {
-            for (var i = 0; i < elem.length; i++) {
-                for (var j = 0; j < cl.length; j++) {
+            for (let i = 0; i < elem.length; i++) {
+                for (let j = 0; j < cl.length; j++) {
                     if (!elem[i].classList.contains(cl[j])) {
                         return false;
                     }
                 }
             }
         } else {
-            for (var i = 0; i < elem.length; i++) {
+            for (let i = 0; i < elem.length; i++) {
                 if (!elem[i].classList.contains(cl)) {
                     return false;
                 }
@@ -247,7 +274,7 @@ function clc(elem, cl) {//every element has every class
         }
     } else {
         if (cl instanceof Array) {
-            for (var i = 0; i < cl.length; i++) {
+            for (let i = 0; i < cl.length; i++) {
                 if (!elem.classList.contains(cl[i])) {
                     return false;
                 }
@@ -259,6 +286,38 @@ function clc(elem, cl) {//every element has every class
         }
     }
     return true;
+}
+
+function clt_ch(elem, cl){
+	if (elem instanceof Element) {
+		elem.classList.toggle(cl);
+	} else {
+		elem.container.classList.toggle(cl);
+	}
+}
+
+function clt(elem, cl) {
+	if (elem instanceof Array) {
+		if (cl instanceof Array) {
+			for (let i = 0; i < elem.length; i++) {
+				for (let j = 0; j < cl.length; j++) {
+					clt_ch(elem[i], cl[j]);
+				}
+			}
+		} else {
+			for (let i = 0; i < elem.length; i++) {
+				clt_ch(elem[i], cl);
+			}
+		}
+	} else {
+		if (cl instanceof Array) {
+			for (let i = 0; i < cl.length; i++) {
+				clt_ch(elem, cl[i]);
+			}
+		} else {
+			clt_ch(elem, cl);
+		}
+	}
 }
 
 function blink (elem, style, delay) {
@@ -330,64 +389,6 @@ function g(id) {
     return document.getElementById(id);
 }
 
-function acont(p, c){//console.log(p,c);
-	if (c instanceof Element) {
-		if (p instanceof Element) {
-			p.appendChild(c);
-		} else {//p not element
-			acont(p.container, c);
-		}
-	} else {//c not element
-		if (p instanceof Element) {
-			acont(p, c.container);
-		} else {//p not element
-			acont(p.container, c.container);
-		}
-	}
-	
-}
-function a(p, c) {
-    if (c instanceof Array) {
-        for (var i = 0; i < c.length; i++) {
-			acont(p, c[i]);
-        }
-    } else {
-        acont(p, c);
-    }
-}
-//function a(p, c) {
-    //if (c instanceof Array) {
-        //for (var i = 0; i < c.length; i++) {
-            //if (c[i] instanceof Element || c[i] instanceof Text) {
-                //if (p instanceof Element) {
-                    //p.appendChild(c[i]);
-                //} else {
-                    //p.container.appendChild(c[i]);
-                //}
-            //} else {
-                //if (p instanceof Element) {
-                    //p.appendChild(c[i].container);
-                //} else {
-                    //p.container.appendChild(c[i].container);
-                //}
-            //}
-        //}
-    //} else {
-        //if (c instanceof Element) {
-            //if (p instanceof Element) {
-                //p.appendChild(c);
-            //} else {
-                //p.container.appendChild(c);
-            //}
-        //} else {
-            //if (p instanceof Element) {
-                //p.appendChild(c.container);
-            //} else {
-                //p.container.appendChild(c.container);
-            //}
-        //}
-    //}
-//}
 function stxt(c) {
     if (c instanceof Array) {
         for (var i in c) {
@@ -598,10 +599,7 @@ function mt(n, inh) {
     }
     return m;
 }
-function rme(elem){
-	elem.container.parentNode.removeChild(elem.container);
-}
-function clearCont(cont) {
+function clearc(cont) {
     while (cont.hasChildNodes()) {
         cont.removeChild(cont.firstChild);
     }
@@ -612,6 +610,19 @@ function cleara(a) {
     }
 }
 
+//delete array item
+//returns new array without deleted item
+function delari(arr, item){
+	let narr = [];
+	for(let i = 0; i<arr.length; i++){
+		let curr = arr[i];
+		if(item !== curr){
+			narr.push(curr);
+		}
+	}
+	return narr;
+}
+	
 function clearTmr(v) {
     if (v.tmr !== null) {
         window.clearTimeout(v.tmr);
@@ -858,7 +869,6 @@ function limval(v, min, max) {
     }
     return v;
 }
-
 function checkFloat(v){
 	if(isNaN(v) || !isFinite(v)){
 		return 0;

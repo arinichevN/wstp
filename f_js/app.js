@@ -1,37 +1,30 @@
 window.onload = init;
-var VISU_TYPE = {TOP: 1, DIAL: 2, MAIN: 3};
-var visu = [];
-var elem = [];
-var light_timer = null;
-var night = false;
-var visu_queue = [];
-var INT16_MAX = 32760;
-var INT16_MIN = -32760;
-var INT32_MAX = 2147483647;
-var INT32_MIN = -2147483648;
-var UINT32_MAX = 4294967295;
-var FLOAT_MAX = -1000000.0;
-var FLOAT_MIN = +1000000.0;
-var NO_DATA_STR = "&empty";
+const VISU_TYPE = {TOP: 1, DIAL: 2, MAIN: 3};
+let visu = [];
+let elem = [];
+let light_timer = null;
+let night = false;
+let visu_queue = [];
+
 function init() {
-    for (var i = 0; i < elem.length; i++) {
+    for (let i = 0; i < elem.length; i++) {
         elem[i].init();
     }
-    for (var i = 0; i < visu.length; i++) {
+    for (let i = 0; i < visu.length; i++) {
         visu[i].init();
         visu[i].updateStr();
         // document.body.style.height=window.innerHeight + "px";
         a(document.body, visu[i].container);
     }
-    updateAllStr();
 //    window.onclick = function () {
 //        enlight();
 //    };
 //    enlight();
     showMain();
 }
-function updateAllStr() {
-    for (var i = 0; i < visu.length; i++) {
+
+function updateStr() {
+    for (let i = 0; i < visu.length; i++) {
         visu[i].updateStr();
     }
 }
@@ -48,6 +41,7 @@ function enlight() {
     }, 5000000);
     night = false;
 }
+
 function putOut() {
     if (typeof vnight !== "undefined") {
         showV(vnight);
@@ -83,7 +77,7 @@ function goBack() {
     }
 }
 function showMain() {
-    for (var i = 0; i < visu.length; i++) {
+    for (let i = 0; i < visu.length; i++) {
         if (visu[i].type === VISU_TYPE.MAIN) {
             showV(visu[i]);
         }

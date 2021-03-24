@@ -18,7 +18,7 @@ function RuntimeStep(){
     this.view = null;
     this.view_interval = 300;
     this.setParam = function(item){
-		var start = false;
+		let start = false;
 		switch(this.state){
 			case OFF:case EOFF: 
 				break; 
@@ -58,8 +58,8 @@ function RuntimeStep(){
 	this.getOutput = function(){
 		switch(this.state){
 			case REACH:
-				var now = Date.now();
-				var dt = now - this.start_time;
+				let now = Date.now();
+				let dt = now - this.start_time;
 				//console.log(dt , this.goal_correction , this.value_start);
 		        return dt * this.goal_correction + this.value_start;
 			case HOLD:
@@ -69,41 +69,38 @@ function RuntimeStep(){
 	};
 	this.getReachTimeRest = function(){
 		if(this.state === REACH){
-			var now = Date.now();
-			var dt = this.end_time - now;
+			let now = Date.now();
+			let dt = this.end_time - now;
 			return dt;
 		}
 		return null;
 	};
 	this.getHoldTimeRest = function(){
 		if(this.state === HOLD){
-			var now = Date.now();
-			var dt = this.end_time - now;
+			let now = Date.now();
+			let dt = this.end_time - now;
 			return dt;
 		}
 		return null;
 	};
 	this.startControl = function(interval){
-		var self = this;
 		this.start_time = Date.now();
 		this.end_time = this.start_time + interval;
-		this.tmr = window.setTimeout(function () {
-			self.control();
+		this.tmr = window.setTimeout(() => {
+			this.control();
 		}, interval);
 	};
 	this.resumeControl = function(interval){
-		var self = this;
-		var now = Date.now();
+		let now = Date.now();
 		this.start_time = now + interval;
 		this.end_time = this.start_time + interval;
-		this.tmr = window.setTimeout(function () {
-			self.control();
+		this.tmr = window.setTimeout(() => {
+			this.control();
 		}, interval);
 	};
 	this.startViewTimer = function(){
-		var self = this;
-		this.tmrv = window.setInterval(function () {
-			self.view.showStepRun();
+		this.tmrv = window.setInterval(() => {
+			this.view.showStepRun();
 		}, this.view_interval);
 	};
 	this.done = function(){
@@ -144,8 +141,8 @@ function RuntimeStep(){
 			case OFF: case DONE: REACH: HOLD:
 				this.reset();
 				if (this.reach_time > 0) {
-					var sout = this.sensor.getOutput();
-		            var input = sout.value;
+					let sout = this.sensor.getOutput();
+		            let input = sout.value;
 		            if(input === null) {this.state = FAILURE; console.warn("failed to get input");return;}
 		            this.goal_correction = 0.0;
 		            this.value_start = input;
@@ -179,7 +176,7 @@ function RuntimeStep(){
 		switch(this.state){case OFF:case EOFF: return false;}
 		window.clearTimeout(this.tmr);
 		window.clearInterval(this.tmrv);
-		var now = Date.now();
+		let now = Date.now();
 		this.rest_time = this.end_time - now;
 		return true;
 	};
@@ -187,8 +184,8 @@ function RuntimeStep(){
 		switch(this.state){
 			case OFF:case EOFF: return false;
 			case REACH:
-				var sout = this.sensor.getOutput();
-	            var input = sout.value;
+				let sout = this.sensor.getOutput();
+	            let input = sout.value;
 	            if(input === null) {this.state = FAILURE; console.warn("failed to get input");return;}
 	            this.goal_correction = 0.0;
 	            this.value_start = input;

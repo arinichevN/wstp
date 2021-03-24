@@ -16,21 +16,19 @@ function FieldElemSelect(){
 		this.obj = obj;
 	};
 	this.update = function(v){
-		var vv = false;
+		let vv = false;
 		if(v){
 			vv = true;
 		}
 		this.container.checked = vv;
 	};
-	
-	var self = this;
-	this.container.onchange = function(){
-		if(self.obj !== null){
-			self.obj.selected = self.container.checked;
-			self.obj.selected_time = Date.now();
+	this.container.onchange = () => {
+		if(this.obj !== null){
+			this.obj.selected = this.container.checked;
+			this.obj.selected_time = Date.now();
 		}
-		if(self.func !== null && self.slave !== null){
-			self.func(self.slave);
+		if(this.func !== null && this.slave !== null){
+			this.func(this.slave);
 		}
 	};
 	cla(this.container, ["f_common"]);

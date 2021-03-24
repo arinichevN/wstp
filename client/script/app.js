@@ -1,5 +1,5 @@
-var BLINK_DELAY = 270;
-var LOGGER_PERIOD_MS = 10000;
+const BLINK_DELAY = 270;
+const LOGGER_PERIOD_MS = 10000;
 
 function blinkSuccess(elem){
 	blink(elem,"pr_success", BLINK_DELAY);	
@@ -10,7 +10,7 @@ function blinkFailure(elem){
 }
 
 	
-var app = {
+let app = {
     NAME_SIZE: 32,
     controller_state: null,
     version: 1,

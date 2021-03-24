@@ -66,17 +66,16 @@ function ChannelRow(){
 	this.eemOutIdChanged = function(me, data){
 		me.data.eem_out_id = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.em_id.setSlave(self, self.emIdChanged);
-	this.sensor_id.setSlave(self, self.sensorIdChanged);
-	this.step_id.setSlave(self, self.stepIdChanged);
-	this.reg_id.setSlave(self, self.regIdChanged);
-	this.logger_id.setSlave(self, self.loggerIdChanged);
-	this.bem_id.setSlave(self, self.bemIdChanged);
-	this.eem_id.setSlave(self, self.eemIdChanged);
-	this.bem_out_id.setSlave(self, self.bemOutIdChanged);
-	this.eem_out_id.setSlave(self, self.eemOutIdChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.em_id.setSlave(this, this.emIdChanged);
+	this.sensor_id.setSlave(this, this.sensorIdChanged);
+	this.step_id.setSlave(this, this.stepIdChanged);
+	this.reg_id.setSlave(this, this.regIdChanged);
+	this.logger_id.setSlave(this, this.loggerIdChanged);
+	this.bem_id.setSlave(this, this.bemIdChanged);
+	this.eem_id.setSlave(this, this.eemIdChanged);
+	this.bem_out_id.setSlave(this, this.bemOutIdChanged);
+	this.eem_out_id.setSlave(this, this.eemOutIdChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.em_id, this.bem_id, this.bem_out_id, this.eem_id, this.eem_out_id, this.sensor_id, this.reg_id, this.step_id, this.logger_id]);
 }

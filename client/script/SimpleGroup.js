@@ -36,13 +36,10 @@ function SimpleGroup(header_id) {
 			this.updateStrSh();
 		}
 	};
-
-	var self = this;
-	this.shE.onclick = function(){
-		self.showHide();
+	this.shE.onclick = () => {
+		this.showHide();
 	};
-	
-	var hcont = cd();
+	let hcont = cd();
 	a(hcont, [this.headerE, this.shE]);
     a(this.container, [hcont, this.itemCont]);
     cla(this.headerE, ["gr_head"]);

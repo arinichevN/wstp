@@ -75,8 +75,8 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		me.delBControl();
 	};
 	this.getSelectedRowInd = function(){
-		for(var i=0;i<this.rows.length;i++){
-			var row = this.rows[i];
+		for(let i=0;i<this.rows.length;i++){
+			let row = this.rows[i];
 			if(row.selected){
 				return i;
 			}
@@ -84,46 +84,46 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		return -1;
 	};
 	this.setRchannelParam = function(rchannel, channel_id){
-		var channel = getById(this.channels, channel_id);
+		let channel = getById(this.channels, channel_id);
 		if(channel == null) {console.warn("channel %d not found", channel_id);return false;}
-		var reg = getById(this.regs, channel.reg_id);
+		let reg = getById(this.regs, channel.reg_id);
 		if(reg == null) {console.warn("regulator %d not found for channel %d", channel.reg_id, channel_id);return false;}
 		
-		var logger = getById(this.loggers, channel.logger_id);
+		let logger = getById(this.loggers, channel.logger_id);
 		if(logger == null) {console.warn("logger %d not found for channel %d, it will be disabled", channel.logger_id, channel_id);}
 		
-		var em = getById(this.ems, channel.em_id);
+		let em = getById(this.ems, channel.em_id);
 		if(em == null) {console.warn("EM %d not found", channel.em_id, channel_id);return false;}
 		
-		var bem = getById(this.ems, channel.bem_id);
-		var bem_peer = null;
-		var bout = null;
+		let bem = getById(this.ems, channel.bem_id);
+		let bem_peer = null;
+		let bout = null;
 		if(bem == null) {console.warn("BEM %d not found for channel %d, it will be disabled", channel.bem_id, channel_id);}
 		else {
 			bem_peer = getById(this.peers, bem.peer_id); if(bem_peer == null) {console.warn("BEM peer %d not found for channel %d", bem.peer_id, channel_id);return false;}
 			bout = getById(this.em_outs, channel.bem_out_id); if(bout == null) {console.warn("BEM output %d not found for channel %d", channel.bem_out_id, channel_id);return false;}
 			}
 		
-		var eem = getById(this.ems, channel.eem_id);
-		var eem_peer = null;
-		var eout = null;
+		let eem = getById(this.ems, channel.eem_id);
+		let eem_peer = null;
+		let eout = null;
 		if(eem == null) {console.warn("EEM %d not found for channel %d, it will be disabled", channel.eem_id, channel_id);}
 		else {
 			eem_peer = getById(this.peers, eem.peer_id); if(eem_peer == null) {console.warn("EEM peer %d not found for channel %d", eem.peer_id, channel_id);return false;}
 			eout = getById(this.em_outs, channel.eem_out_id); if(eout == null) {console.warn("EEM output %d not found for channel %d", channel.eem_out_id, channel_id);return false;}
 			}
 		
-		var sensor = getById(this.sensors, channel.sensor_id);
+		let sensor = getById(this.sensors, channel.sensor_id);
 		if(sensor == null) {console.warn("sensor %d not found for channel %d", channel.sensor_id, channel_id);return false;}
-		var step = getById(this.steps, channel.step_id);
+		let step = getById(this.steps, channel.step_id);
 		if(step == null) {console.warn("step %d not found for channel %d", channel.step_id, channel_id);return false;}
-		var em_peer = getById(this.peers, em.peer_id);
+		let em_peer = getById(this.peers, em.peer_id);
 		if(em_peer == null) {console.warn("em %d peer not found for channel %d", em.peer_id, channel_id);return false;}
-		var sensor_peer = getById(this.peers, sensor.peer_id);
+		let sensor_peer = getById(this.peers, sensor.peer_id);
 		if(sensor_peer == null) {console.warn("sensor %d peer not found for channel %d", sensor.peer_id, channel_id);return false;}
-		var pid = null;
-		var pos2 = null;
-		var pos1 = null;
+		let pid = null;
+		let pos2 = null;
+		let pos1 = null;
 		switch(reg.method){
 			case REG_METHOD_PID:
 				pid = getById(this.pids, reg.pid_id);
@@ -143,7 +143,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		return true;
 	};
 	this.delBControl = function(){
-		var r = this.getSelectedRowInd();
+		let r = this.getSelectedRowInd();
 		if(r > -1){
 			this.delB.disabled = false;
 		}else{
@@ -151,14 +151,14 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		}
 	};
 	this.mayAddChannel = function (nchannel){
-		var r = true;
-		for(var i=0;i<this.arr.length;i++){
-			var channel = this.arr[i];
+		let r = true;
+		for(let i=0;i<this.arr.length;i++){
+			let channel = this.arr[i];
 			if(equalSensors(channel.sensor, nchannel.sensor)){
 				console.warn("equal Sensors for channels %d and %d", channel.id, nchannel.id);
 				r = r && false;
 			}
-			var em = channel.em;
+			let em = channel.em;
 			if(equalEMs(em, nchannel.em)){
 				console.warn("equal EMs for channels %d and %d", channel.id, nchannel.id);
 				r = r && false;
@@ -217,8 +217,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		return r;
 	};
 	this.addRow = function(channel_id){
-		var self = this;
-		var nd = new RuntimeChannel();
+		let nd = new RuntimeChannel();
 		nd.id = channel_id;
 		if(!this.setRchannelParam(nd, nd.id)){
 			return false;
@@ -227,17 +226,17 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 			return false;
 		}
 		this.arr.push(nd);
-		var nr = new RuntimeChannelRow(nd, this.util);
+		let nr = new RuntimeChannelRow(nd, this.util);
 		nr.updateStr();
 		nd.setView(nr);
-		var row_cont = {selected:false, selected_time:null, container:null};
-	    var selectE = new FieldElemSelect();
-	    selectE.setSlave(self, self.rowSelected);
+		let row_cont = {selected:false, selected_time:null, container:null};
+	    let selectE = new FieldElemSelect();
+	    selectE.setSlave(this, this.rowSelected);
 	    selectE.setObj(row_cont);
 	    selectE.update(false);
 	    selectE.updateStr();
 	    
-	    var rccont = cd();
+	    let rccont = cd();
 	    cla(rccont, ["rs_rowCont"]);
 	    cla(selectE, ["rs_select"]);
 		a(rccont, [selectE, nr]);
@@ -249,7 +248,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		return true;
 	};
 	this.addItem = function(){
-		var channel_id = parseInt(this.chidE.value);
+		let channel_id = parseInt(this.chidE.value);
 		if(isNaN(channel_id)){
 			console.warn("check param:", db_row.id, channel_id);
 			blinkFailure(this.newB);
@@ -260,7 +259,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		}
 	};
 	this.addItemFromDBRow = function(db_row){
-		var channel_id = parseInt(db_row.id);
+		let channel_id = parseInt(db_row.id);
 		if(isNaN(channel_id)){
 			console.warn("check param:", db_row.id, channel_id);
 			return;
@@ -268,16 +267,16 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		this.addRow(channel_id);
 	};
 	this.getRowsForDB = function(){
-		var out = [];
-		for(var i=0;i<this.arr.length;i++){
-			var r = this.arr[i].getRowForDB();
+		let out = [];
+		for(let i=0;i<this.arr.length;i++){
+			let r = this.arr[i].getRowForDB();
 			out.push(r);
 		}
 		return out;
 	};
 	this.deleteItem = function(){
 		while(1){
-			var i = this.getSelectedRowInd();
+			let i = this.getSelectedRowInd();
 			if(i < 0){
 				break;
 			}else{
@@ -290,12 +289,12 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 	};
 	this.deleteAll = function(){
 		cleara(this.arr);
-		clearCont(this.rowCont);
+		clearc(this.rowCont);
 		cleara(this.rows);
 	};
 	this.saveAll = function(){
-		var r = this.getRowsForDB();
-		var data = [
+		let r = this.getRowsForDB();
+		let data = [
             {
                 action: ['save_rchannel'],
                 param: {rows:r}
@@ -305,7 +304,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
         sendTo(this, data, this.ACTION.SAVE, 'server');
 	};
 	this.getAll = function(){
-        var data = [
+        let data = [
             {
                 action: ['getall'],
                 param: {tbl: this.tbl}
@@ -322,7 +321,7 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 				break;
 			case this.ACTION.GET:
 				this.deleteAll();
-				for (var i = 0; i < d.length; i++) {
+				for (let i = 0; i < d.length; i++) {
 					this.addItemFromDBRow(d[i]);
 				}
 				cursor_blocker.disable();
@@ -352,26 +351,25 @@ function RuntimeChannelRowSet(arr, peers, ems, sensors, pids, pos2s, regs, steps
 		}
 		cursor_blocker.disable();
 	};
-	var self = this;
-	this.shE.onclick = function(){
-		self.expandHide();
+	this.shE.onclick = ()=>{
+		this.expandHide();
 	};
-	this.newB.onclick = function(){
-		self.addItem();
+	this.newB.onclick = ()=>{
+		this.addItem();
 	};
-	this.delB.onclick = function(){
-		self.deleteItem();
+	this.delB.onclick = ()=>{
+		this.deleteItem();
 	};
-	this.saveB.onclick = function(){
-		self.saveAll();
+	this.saveB.onclick = ()=>{
+		this.saveAll();
 	};
-	this.getB.onclick = function(){
-		self.getAll();
+	this.getB.onclick = ()=>{
+		this.getAll();
 	};
 	this.delBControl();
-	var hcont = cd();
+	let hcont = cd();
 	a(hcont, [this.headerE, this.shE]);
-	var bcont = cd();
+	let bcont = cd();
 	a(bcont, [this.chidE, this.newB, this.delB, this.saveB, this.getB]);
 	a(this.itemCont, [bcont, this.rowCont]);
     a(this.container, [hcont, this.itemCont]);

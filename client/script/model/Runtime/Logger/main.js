@@ -57,9 +57,8 @@ function RuntimeLogger(){
 	};
     this.start = function(){
 		if(!this.enabled) {return;}
-		var self = this;
-		this.tmr = window.setInterval(function () {
-			self.control();
+		this.tmr = window.setInterval(() => {
+			this.control();
 		}, this.interval);
 		this.state = INIT;
 	};
@@ -75,7 +74,7 @@ function RuntimeLogger(){
 		this._stop(EOFF);
 	};
 	this.cpTextToClipboard = function(text){
-		var elem = c("textarea");
+		let elem = c("textarea");
 		//cla(elem, "hdn");
 		cla(elem, "clipboard");
 		elem.value = text;
@@ -83,7 +82,7 @@ function RuntimeLogger(){
 		elem.focus();
 		elem.select();
 		try {
-			var r = document.execCommand('copy');
+			let r = document.execCommand('copy');
 			if(!r){
 				console.warn("failed to copy to clipboard 1");
 			}
@@ -94,19 +93,19 @@ function RuntimeLogger(){
 		document.body.removeChild(elem);
 	};
 	this.dataToText = function(data){
-		var text = "";
-		for(var i=0;i<data.length;i++){
+		let text = "";
+		for(let i=0;i<data.length;i++){
 			text+=data[i].x.getTime().toString() + "\t" + data[i].y.toString() + "\n";
 		}
 		return text;
 	};
 	this.cpDataToClipboard = function(data){
-		var text = this.dataToText(data);
+		let text = this.dataToText(data);
 		this.cpTextToClipboard(text);
 	};
 	this.saveBuf = function () {
-		//var r = this.getRowsForDB();
-		var data = [
+		//let r = this.getRowsForDB();
+		let data = [
             {
                 action: ["save_" + this.tbl],
                 param: {channel_id:this.channel_id, max_rows:this.max_rows, rows:this.buf.arr}
@@ -115,7 +114,7 @@ function RuntimeLogger(){
         sendTo(this, data, this.ACTION.SAVE, "server");
     };
     this.getData = function(){
-        var data = [
+        let data = [
             {
                 action: ['get_log'],
                 param: {channel_id: this.channel_id}
@@ -124,7 +123,7 @@ function RuntimeLogger(){
         sendTo(this, data, this.ACTION.GET, 'server');
 	};
 	this.clearDB = function(){
-        var data = [
+        let data = [
             {
                 action: ['clear_log'],
                 param: {channel_id: this.channel_id}
@@ -133,9 +132,9 @@ function RuntimeLogger(){
         sendTo(this, data, this.ACTION.CLEAR, 'server');
 	};
 	this.getItemForView = function(db_row){
-		var channel_id = parseInt(db_row.channel_id);
-		var mark = parseInt(db_row.mark);
-		var value = parseFloat(db_row.value);
+		let channel_id = parseInt(db_row.channel_id);
+		let mark = parseInt(db_row.mark);
+		let value = parseFloat(db_row.value);
 		if(isNaN(channel_id) || isNaN(mark) || !(checkFloat(value))){
 			return {channel_id:null, mark:null, value:null};
 		}
@@ -147,8 +146,8 @@ function RuntimeLogger(){
 				break;
 			case this.ACTION.GET:
 				this.view.clearData();
-				for (var i = 0; i < d.length; i++) {
-					var item = this.getItemForView(d[i]);
+				for (let i = 0; i < d.length; i++) {
+					let item = this.getItemForView(d[i]);
 					if(item.channel_id !== null){
 						this.view.addItem(item);
 					}
@@ -182,7 +181,7 @@ function RuntimeLogger(){
 	};
 	this.setNewValue = function(v){
 		if(this.buf.i < this.buf.len){
-			var item = {mark:Date.now(), value:v.value};
+			let item = {mark:Date.now(), value:v.value};
 			this.buf.arr.push(item); //console.log("logger new item", item);
 			this.buf.i++;
 			this.view.addItem(item);
@@ -196,7 +195,7 @@ function RuntimeLogger(){
 	this.control = function(){//console.log("logger control", this.state, RUN, OFF);
 		switch(this.state){
 			case RUN:
-				var output = this.sensor.getOutput();
+				let output = this.sensor.getOutput();
 				if(output.tm !== null && output.value !== null){
 					if(output.tm !== this.last_tm){
 						this.setNewValue(output);

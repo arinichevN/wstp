@@ -30,6 +30,37 @@ section{
     cursor: wait;
     z-index:101;
 }
+
+.langsel_cont{
+	border: 1px solid gray;
+	float:left;
+	clear:left;
+	margin: 2px;
+	cursor: default;
+}
+.langsel_icont{
+	float:left;
+	clear:left;
+	margin: 2px;
+}
+.langsel_descr{
+	float:left;
+	clear:left;
+	margin: 2px;
+}
+.langsel_item{
+	margin: 2px;
+	padding: 2px;
+	color: gray;
+	
+}
+.langsel_item:hover{
+    outline: 1px solid blue;
+}
+.langsel_ienbl{
+	color: black;
+}
+
 .page_blocker{
     position: fixed;
     top:0px;

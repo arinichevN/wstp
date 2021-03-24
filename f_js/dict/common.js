@@ -71,7 +71,16 @@ trans.addDict([
 	{id: 70, str: ["month", "месяц"]},
 	{id: 71, str: ["turn on", "включить"]},
 	{id: 72, str: ["turn off", "выключить"]},
-		
+	{id: 73, str: ["start", "старт"]},
+	{id: 74, str: ["stop", "стоп"]},
+	{id: 75, str: ["reset", "сброс"]},
+	{id: 76, str: ["reload", "перезагрузить"]},
+	{id: 77, str: ["restart", "перезапустить"]},
+	{id: 78, str: ["show",  "развернуть"]},
+	{id: 79, str: ["hide",  "свернуть"]},
+	{id: 80, str: ["create",  "создать"]},
+	
+	
     {id: 200, str: ["success", "успешно"]},
     {id: 201, str: ["fail", "неудачно"]},
     {id: 202, str: ["update failed", "не удалось обновить"]},

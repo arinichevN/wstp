@@ -1,30 +1,30 @@
 
-var REG_MODE_HEATER = 1;
-var REG_MODE_COOLER = 0;
+const REG_MODE_HEATER = 1;
+const REG_MODE_COOLER = 0;
 
-var REG_METHOD_PID = 0;
-var REG_METHOD_POS2 = 1;
-var REG_METHOD_POS1 = 2;
+const REG_METHOD_PID = 0;
+const REG_METHOD_POS2 = 1;
+const REG_METHOD_POS1 = 2;
 
-var OUT_MAX = 0;
-var OUT_MIN = 1;
+const OUT_MAX = 0;
+const OUT_MIN = 1;
 
-var ind = 0;
-var INIT = ind; ind++;
-var OFF = ind; ind++;
-var EOFF = ind; ind++;
-var DONE = ind; ind++;
-var RUN = ind; ind++;
-var HOLD = ind; ind++;
-var REACH = ind; ind++;
-var FAILURE = ind; ind++;
-var SUCCESS = ind; ind++;
-var PAUSE = ind; ind++;
-var PAUSING = ind; ind++;
-var RESUMING = ind; ind++;
-var STOPPING = ind; ind++;
-var START_REMOTE = ind; ind++;
-var STOP_REMOTE = ind; ind++;
+let ind = 0;
+const INIT = ind; ind++;
+const OFF = ind; ind++;
+const EOFF = ind; ind++;
+const DONE = ind; ind++;
+const RUN = ind; ind++;
+const HOLD = ind; ind++;
+const REACH = ind; ind++;
+const FAILURE = ind; ind++;
+const SUCCESS = ind; ind++;
+const PAUSE = ind; ind++;
+const PAUSING = ind; ind++;
+const RESUMING = ind; ind++;
+const STOPPING = ind; ind++;
+const START_REMOTE = ind; ind++;
+const STOP_REMOTE = ind; ind++;
 
 function getStateStr(v){
 	switch(v){
@@ -46,16 +46,16 @@ function getStateStr(v){
 	}
 	return "?";
 }
-var regmode_list = [
+const regmode_list = [
 	{name: "HEATER", value:REG_MODE_HEATER},
 	{name: "COOLER", value:REG_MODE_COOLER}
 ];
-var regmethod_list = [
+const regmethod_list = [
 	{name: "PID", value:REG_METHOD_PID},
 	{name: "Pos2", value:REG_METHOD_POS2},
 	{name: "Pos1", value:REG_METHOD_POS1}
 ];
-var yn_list = [
+const yn_list = [
 	{name: "YES", value:1},
 	{name: "NO", value:0}
 ];

@@ -88,7 +88,7 @@ function autoload($class) {
     if (file_exists($p)) {
         require $p;
     } else {
-        throw new \Exception('no class:' . $p);
+        throw new \Exception('no class');
     }
 }
 

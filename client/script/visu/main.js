@@ -35,7 +35,7 @@ function Main() {
 		this.rchannelG = new RuntimeChannelRowSet(this.rchannels, this.peers, this.ems, this.sensors, this.pids, this.pos2s, this.regs, this.steps, this.loggers, this.em_outs, this.channels, "rchannel", 319);
 		this.paramG.a(this.param_arr);
 		a(this.container, [this.paramG, this.rchannelG]);
-		for(var i=0;i<this.param_arr.length;i++){
+		for(let i=0;i<this.param_arr.length;i++){
 			this.param_arr[i].getAll();
 		}
 		this.rchannelG.getAll();
@@ -47,7 +47,7 @@ function Main() {
     this.updateStr = function () {
 		this.paramG.updateStr();
 		this.rchannelG.updateStr();
-		for(var i=0;i<this.param_arr.length;i++){
+		for(let i=0;i<this.param_arr.length;i++){
 			this.param_arr[i].updateStr();
 		}
     };
@@ -62,5 +62,5 @@ function Main() {
 		this.visible = false;
     };
 }
-var vmain = new Main();
+let vmain = new Main();
 visu.push(vmain);

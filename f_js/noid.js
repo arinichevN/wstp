@@ -1,0 +1,3 @@
+
+const NOID_ID_UNKNOWN = 0;
+const NOID_ID_BROADCAST = 255;

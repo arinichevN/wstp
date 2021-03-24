@@ -18,9 +18,8 @@ function EMOutRow(){
 	this.outChanged = function(me, data){
 		me.data.out = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.out.setSlave(self, self.outChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.out.setSlave(this, this.outChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.out]);
 }

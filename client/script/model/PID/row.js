@@ -48,14 +48,13 @@ function PIDRow(){
 	this.outMaxChanged = function(me, data){
 		me.data.out_max = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.mode.setSlave(self, self.modeChanged);
-	this.kp.setSlave(self, self.kpChanged);
-	this.ki.setSlave(self, self.kiChanged);
-	this.kd.setSlave(self, self.kdChanged);
-	this.out_min.setSlave(self, self.outMinChanged);
-	this.out_max.setSlave(self, self.outMaxChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.mode.setSlave(this, this.modeChanged);
+	this.kp.setSlave(this, this.kpChanged);
+	this.ki.setSlave(this, this.kiChanged);
+	this.kd.setSlave(this, this.kdChanged);
+	this.out_min.setSlave(this, this.outMinChanged);
+	this.out_max.setSlave(this, this.outMaxChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.mode, this.kp, this.ki, this.kd, this.out_min, this.out_max]);
 }

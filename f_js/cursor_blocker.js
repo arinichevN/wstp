@@ -5,11 +5,11 @@ function CursorBlocker() {
     this.pX = null;
     this.pY = null;
     this.init = function () {
-        var self = this;
-        var f = function (e) {
-            self.move(e);
-        };
-        window.addEventListener('mousemove', f, false);
+        //var self = this;
+       // var f = function (e) {
+        //    self.move(e);
+       // };
+        window.addEventListener('mousemove',(e)=>{this.move(e)}, false);
         this.container = cd();
         cla(this.container,['cursor_blocker','hdn']);
         a(document.body, this.container);
@@ -48,6 +48,6 @@ function CursorBlocker() {
         }
     };
 }
-var cursor_blocker = new CursorBlocker();
+let cursor_blocker = new CursorBlocker();
 elem.push(cursor_blocker);
 

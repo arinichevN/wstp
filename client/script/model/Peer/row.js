@@ -24,10 +24,9 @@ function PeerRow(){
 	this.ip_addrChanged = function(me, data){
 		me.data.ip_addr = data;
 	};
-	var self = this;
-	this.id.setSlave(self, self.idChanged);
-	this.port.setSlave(self, self.portChanged);
-	this.ip_addr.setSlave(self, self.ip_addrChanged);
+	this.id.setSlave(this, this.idChanged);
+	this.port.setSlave(this, this.portChanged);
+	this.ip_addr.setSlave(this, this.ip_addrChanged);
 	cla(this.container, ["r_cont"]);
 	a(this.container, [this.id, this.ip_addr, this.port]);
 }

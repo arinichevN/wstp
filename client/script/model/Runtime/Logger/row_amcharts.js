@@ -21,7 +21,7 @@ function RuntimeLoggerRow(slave){
 	this.addItem = function(v){
 		this.data.push({x:new Date(v.mark), y:v.value});
 		if(this.data.length >= this.max_rows){
-			var out = this.data.shift();
+			let out = this.data.shift();
 		}
 		this.chart.data = this.data;
 	};
@@ -60,17 +60,16 @@ function RuntimeLoggerRow(slave){
 			blinkFailure(this.clearB);
 		}
 	};
-	var self = this;
-	this.showB.onclick = function(){
-		self.showHideChart();
+	this.showB.onclick = () => {
+		this.showHideChart();
 	};
-	this.cpB.onclick = function(){
-		self.slave.cpDataToClipboard(self.data);
+	this.cpB.onclick = () => {
+		this.slave.cpDataToClipboard(this.data);
 	};
-	this.clearB.onclick = function(){
-		self.slave.clearDB();
+	this.clearB.onclick = () => {
+		this.slave.clearDB();
 	};
-	var lbcont = cd();
+	let lbcont = cd();
 	a(lbcont, [this.showB, this.cpB, this.clearB]);
 	a(this.container, [this.canvas, lbcont]);
 	
@@ -83,14 +82,14 @@ function RuntimeLoggerRow(slave){
 	this.chart.paddingRight = 20;
 	this.chart.data = this.data;
 
-	var dateAxis = this.chart.xAxes.push(new am4charts.DateAxis());
+	let dateAxis = this.chart.xAxes.push(new am4charts.DateAxis());
 	dateAxis.renderer.grid.template.location = 0;
 	
-	var valueAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
+	let valueAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
 	valueAxis.tooltip.disabled = true;
 	valueAxis.renderer.minWidth = 35;
 	
-	var series = this.chart.series.push(new am4charts.LineSeries());
+	let series = this.chart.series.push(new am4charts.LineSeries());
 	series.dataFields.dateX = "x";
 	series.dataFields.valueY = "y";
 	series.strokeWidth = 2;
@@ -101,6 +100,6 @@ function RuntimeLoggerRow(slave){
 	
 	this.chart.cursor = new am4charts.XYCursor();
 	
-	var scrollbarX = new am4core.Scrollbar();
+	let scrollbarX = new am4core.Scrollbar();
 	this.chart.scrollbarX = scrollbarX;
 }

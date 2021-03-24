@@ -8,8 +8,8 @@ function RuntimeRegulator(){
     this.control_func = null;
     this.setParam = function(item, pid, pos2){
 		this.method = item.method;
-		if(pid!==null) {var lpid = this.pid; lpid.mode = pid.mode; lpid.kp = pid.kp; lpid.ki = pid.ki; lpid.kd = pid.kd; lpid.out_min = pid.out_min; lpid.out_max = pid.out_max; }
-		if(pos2!==null) {var lp = this.pos2; lp.mode = pos2.mode; lp.hys = pos2.hys; lp.out_min = pos2.out_min; lp.out_max = pos2.out_max;}
+		if(pid!==null) {let lpid = this.pid; lpid.mode = pid.mode; lpid.kp = pid.kp; lpid.ki = pid.ki; lpid.kd = pid.kd; lpid.out_min = pid.out_min; lpid.out_max = pid.out_max; }
+		if(pos2!==null) {let lp = this.pos2; lp.mode = pos2.mode; lp.hys = pos2.hys; lp.out_min = pos2.out_min; lp.out_max = pos2.out_max;}
 	
 	};
     this.checkMethod = function(v){
@@ -116,16 +116,16 @@ function RuntimeRegulator(){
 		p.state = OUT_MIN;
 	};
 	this.pidControl = function(goal, input, tm){
-		var p = this.pid;
-		var now = input.tm;
-		var khc = 1;
+		let p = this.pid;
+		let now = input.tm;
+		let khc = 1;
 		if(p.mode === REG_MODE_COOLER) khc = -1;
 		if(!p.ptm_set){p.previous_time = now; p.ptm_set = true; p.out = 0.0; return p.out;}
 		if(p.previous_time > now){p.previous_time = now; return p.out;}//time loop detected
-		var dt = now - p.previous_time;
-		var error = goal - input.value;
-		var ierror = p.integral_error + error * dt;
-		var derror = (error - p.previous_error) / dt;
+		let dt = now - p.previous_time;
+		let error = goal - input.value;
+		let ierror = p.integral_error + error * dt;
+		let derror = (error - p.previous_error) / dt;
 		//console.log("err: %f, ierr: %f, derr: %f, dt: %f", error, ierror, derror, dt);
 		p.out = p.kp * khc * error + p.ki * khc * ierror + p.kd * khc * derror;
 		//console.log("pid now: %f sp:%f in:%f out:%f", now, goal, input, out);
@@ -139,9 +139,9 @@ function RuntimeRegulator(){
 	    return p.out;
 	};
 	this.pos2Control = function(goal, input, tm){
-		var p = this.pos2;
-		var out = null;
-		var inval = input.value;
+		let p = this.pos2;
+		let out = null;
+		let inval = input.value;
 		switch (p.state) {
                 case OUT_MAX:
                     switch ( p.mode ) {

@@ -13,7 +13,7 @@ $af = function($p) {
 			$r = $r && \db\commandF($q);
 			if($r){$n++;}
 		}else{
-			$q = "update log set mark={$row['mark']}, value={$row['value']} where id=$channel_id and mark = (select min(mark) from log where id=$channel_id);";
+			$q = "update log set mark={$row['mark']}, value={$row['value']} where channel_id=$channel_id and mark = (select min(mark) from log where channel_id=$channel_id);";
 			$r = $r && \db\commandF($q);
 		}
 	}

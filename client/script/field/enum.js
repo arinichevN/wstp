@@ -13,24 +13,23 @@ function FieldElemEnum(items, sz){
 		this.func = func;
 	};
 	this.update = function(v){
-		for(var i=0;i<this.items.length;i++){
+		for(let i=0;i<this.items.length;i++){
 			if(this.items[i].value === v){
 				this.container.selectedIndex = i;
 			}
 		}
 	};
-	for(var i=0;i<this.items.length;i++){
-		var o = c("option");
+	for(let i=0;i<this.items.length;i++){
+		let o = c("option");
 		if(i===0){
 			o.selected = true;	
 		}
 		o.innerHTML=this.items[i].name;
 		a(this.container, o);
 	}
-	var self = this;
-	this.container.onchange = function(){
-		if(self.func !== null && self.slave !== null){
-			self.func(self.slave, self.items[self.container.selectedIndex].value);
+	this.container.onchange = () => {
+		if(this.func !== null && this.slave !== null){
+			this.func(this.slave, this.items[this.container.selectedIndex].value);
 		}
 	};
 	cla(this.container, ["f_common"]);

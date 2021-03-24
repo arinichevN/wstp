@@ -15,11 +15,9 @@ function FieldElemFloat(){
 	this.update = function(v){
 		this.container.value = v;
 	};
-	
-	var self = this;
-	this.container.onchange = function(){
-		if(self.func !== null && self.slave !== null){
-			self.func(self.slave, parseFloat(self.container.value));
+	this.container.onchange = () => {
+		if(this.func !== null && this.slave !== null){
+			this.func(this.slave, parseFloat(this.container.value));
 		}
 	};
 	cla(this.container, ["f_common", "f_float"]);
